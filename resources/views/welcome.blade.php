@@ -8,7 +8,7 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=prompt:300,400,500,600,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles / Scripts  -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -20,7 +20,7 @@
 
     <style>
         body {
-            font-family: 'Prompt', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family: 'Sarabun', sans-serif;
         }
     </style>
 </head>
@@ -51,7 +51,7 @@
             {{-- ปุ่มจองห้องประชุม --}}
             <div class="mt-10">
                 <a
-                    href="{{ route('calender') }}"
+                    href="{{ route('calendar') }}"
                     class="inline-flex items-center justify-center px-10 py-4 rounded-full text-white text-base md:text-lg font-medium
                            bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-300
                            shadow-md transition"
