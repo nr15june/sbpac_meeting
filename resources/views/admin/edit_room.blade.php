@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'เพิ่มห้องประชุม | ศอ.บต.')
+@section('title', 'แก้ไขห้องประชุม | ศอ.บต.')
 
 @section('content')
 
@@ -12,7 +12,7 @@
         padding: 0 1rem;
     }
 
-    /* แถบหัวข้อ + ปุ่มย้อนกลับ */
+    /* แถบหัวข้อ */
     .create-room-header {
         display: flex;
         align-items: center;
@@ -220,15 +220,14 @@
 {{-- ============ เนื้อหา ============ --}}
 <div class="create-room-wrapper">
 
-    {{-- แถบหัวข้อ + ปุ่มย้อนกลับ --}}
+    {{-- แถบหัวข้อ --}}
     <div class="create-room-header">
         <div class="create-room-header-left">
             <div class="create-room-icon">
-                <i class="bi bi-calendar2-plus" style="font-size: 1.25rem; color: #374151;"></i>
+                <i class="bi bi-pencil-square" style="font-size: 1.25rem; color: #374151;"></i>
             </div>
-            <h1 class="create-room-title">เพิ่มห้องประชุม</h1>
+            <h1 class="create-room-title">แก้ไขห้องประชุม</h1>
         </div>
-
     </div>
 
     {{-- กล่องฟอร์ม --}}
@@ -239,19 +238,21 @@
             รายละเอียดห้องประชุม
         </div>
 
-        {{-- ฟอร์มเพิ่มห้อง --}}
-        <form id="create-room-form"
-              action="{{ route('rooms.store') }}"
+        {{-- ฟอร์มแก้ไขห้อง --}}
+        <form id="edit-room-form"
+              action="{{ route('rooms.update', $room->room_id) }}"
               method="POST"
               enctype="multipart/form-data"
               class="create-room-card-body">
             @csrf
+            @method('PUT')
 
             {{-- ชื่อห้องประชุม --}}
             <div class="form-group">
                 <label class="form-label">ชื่อห้องประชุม</label>
                 <input type="text" name="room_name"
                        class="form-input"
+                       value="{{ old('room_name', $room->room_name) }}"
                        placeholder="ระบุชื่อห้องประชุม">
             </div>
 
@@ -261,6 +262,7 @@
                     <label class="form-label">อาคาร</label>
                     <input type="text" name="building"
                            class="form-input"
+                           value="{{ old('building', $room->building) }}"
                            placeholder="อาคาร / ชั้น">
                 </div>
 
@@ -268,6 +270,7 @@
                     <label class="form-label">จำนวนคน/ห้อง</label>
                     <input type="number" name="capacity" min="1"
                            class="form-input"
+                           value="{{ old('capacity', $room->capacity) }}"
                            placeholder="เช่น 10">
                 </div>
             </div>
@@ -277,26 +280,31 @@
                 <label class="form-label">รายละเอียด</label>
                 <textarea name="description"
                           class="form-textarea"
-                          placeholder="เช่น มีโปรเจคเตอร์ ไมโครโฟน ไวท์บอร์ด ฯลฯ"></textarea>
+                          placeholder="เช่น มีโปรเจคเตอร์ ไมโครโฟน ไวท์บอร์ด ฯลฯ">{{ old('description', $room->description) }}</textarea>
             </div>
 
             {{-- อัปโหลดรูปภาพ --}}
             <div class="form-group">
-                <label class="form-label">รูปภาพ</label>
+                <label class="form-label">รูปภาพ (ถ้าไม่เลือกใหม่ จะใช้รูปเดิม)</label>
                 <input type="file" name="room_image"
                        class="form-file">
+
+                @if($room->room_image)
+                    <div style="margin-top: 0.5rem;">
+                        <span style="font-size: 0.8rem; color:#6b7280;">รูปปัจจุบัน:</span><br>
+                        <img src="{{ asset('storage/'.$room->room_image) }}"
+                             alt="{{ $room->room_name }}"
+                             style="width: 160px; border-radius: 0.375rem; margin-top:0.25rem;">
+                    </div>
+                @endif
             </div>
 
             {{-- ปุ่มบันทึก --}}
             <div class="btn-submit-wrapper">
-                {{-- ❌ ไม่ใช้ confirm ของ browser แล้ว --}}
-                {{-- <button type="submit" onclick="return confirm('ยืนยันการบันทึกข้อมูลห้องประชุมหรือไม่?')" class="btn-submit">บันทึก</button> --}}
-
-                {{-- ✅ ใช้ปุ่มเปิด popup แทน --}}
                 <button type="button"
                         onclick="openConfirmPopup()"
                         class="btn-submit">
-                    บันทึก
+                    บันทึกการแก้ไข
                 </button>
             </div>
         </form>
@@ -309,12 +317,12 @@
                 </div>
 
                 <div class="popup-text" style="margin-bottom: 1.2rem;">
-                    ต้องการบันทึกข้อมูลห้องประชุมหรือไม่?
+                    ต้องการบันทึกการแก้ไขข้อมูลห้องประชุมหรือไม่?
                 </div>
 
                 <div style="display:flex; gap:1rem; justify-content:center;">
                     <button class="btn-cancel" onclick="closeConfirmPopup()">ยกเลิก</button>
-                    <button class="btn-confirm" onclick="submitForm()">ตกลง</button>
+                    <button class="btn-confirm" onclick="submitEditForm()">ตกลง</button>
                 </div>
             </div>
         </div>
@@ -332,9 +340,8 @@
         document.getElementById('confirmPopup').style.display = 'none';
     }
 
-    function submitForm() {
-        // ส่งฟอร์มจริง
-        document.getElementById('create-room-form').submit();
+    function submitEditForm() {
+        document.getElementById('edit-room-form').submit();
     }
 </script>
 

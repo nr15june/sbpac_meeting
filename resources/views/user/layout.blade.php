@@ -70,7 +70,7 @@
 
                 <nav class="text-sm">
                     <!-- จองห้องประชุม -->
-                    <a href="{{ route('create_booking') }}"
+                    <a href="{{ route('user_rooms') }}"
                         class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-calendar2-event mr-2 text-white"></i>
                         <span>จองห้องประชุม</span>
@@ -101,7 +101,7 @@
             </aside>
 
         {{-- ================== พื้นที่แสดงเนื้อหาแต่ละหน้า ================== --}}
-        <main class="flex-1 bg-gray-100 p-6 overflow-y-auto">
+        <main class="flex-1 bg-[#FFFFFF] p-6 overflow-y-auto">
             @yield('content')
         </main>
         

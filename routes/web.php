@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminRoomController;
+use App\Models\Room;
 
 //-------หน้าแรก-------//
 Route::get('/', function () {
@@ -23,6 +24,11 @@ Route::get('/calendar', function () {
 })->name('calendar');
 
 //-------หน้าจองห้อง-------//
+Route::get('/room', function () {
+    $rooms = Room::all();                
+    return view('user.room', compact('rooms'));  
+})->name('user_rooms');
+
 Route::get('/create_booking', function () {
     return view('user.create_booking');
 })->name('create_booking');
@@ -53,6 +59,7 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.
 //     return 'ยินดีต้อนรับเข้าสู่หน้า Admin Dashboard';
 // })->name('admin_calendar'); 
 
+
 //-------หน้าปฏิทินการใช้ห้อง-------//
 Route::get('/admin/calendar', function () {
     return view('admin.calendar');
@@ -61,14 +68,25 @@ Route::get('/admin/calendar', function () {
 Route::post('/admin/rooms/store', [AdminRoomController::class, 'store'])
      ->name('rooms.store');
 
+
 //-------หน้าห้องประชุม-------//
+// Admin Meeting Rooms
 Route::get('/admin/meetingrooms', [AdminRoomController::class, 'index'])
     ->name('admin_meetingrooms');
-
-//-------หน้าจองห้อง-------//
+// Create Room Page
 Route::get('/admin/create_room', function () {
     return view('admin.create_room');
 })->name('admin_create_room');
+// Delete Room
+Route::delete('/admin/rooms/{room}', [AdminRoomController::class, 'destroy'])
+    ->name('admin_delete_room');
+// Edit Room
+Route::get('/admin/rooms/{room_id}/edit', [AdminRoomController::class, 'edit'])
+    ->name('admin_edit_room');
+// Update Room
+Route::put('/admin/rooms/{room_id}', [AdminRoomController::class, 'update'])
+    ->name('rooms.update');
+
 
 //-------หน้าประวัติการจอง-------//
 Route::get('/admin/history_booking', function () {

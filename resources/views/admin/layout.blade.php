@@ -101,7 +101,7 @@
             </aside>
 
         {{-- ================== พื้นที่แสดงเนื้อหาแต่ละหน้า ================== --}}
-        <main class="flex-1 bg-gray-100 p-6 overflow-y-auto">
+        <main class="flex-1 bg-[#FFFFFF] p-6 overflow-y-auto">
             @yield('content')
         </main>
         
