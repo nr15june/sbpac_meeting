@@ -148,6 +148,7 @@
                         class="btn-book-room">
                         จองห้องนี้
                     </a>
+
                 </div>
             </div>
 

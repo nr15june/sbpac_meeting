@@ -330,22 +330,25 @@
                 </div>
 
                 <div class="room-actions">
+
                     <a href="{{ route('admin_edit_room', $room->room_id) }}" class="btn-edit-room">
                         แก้ไข
                     </a>
-                    <form action="{{ route('admin_delete_room', $room->room_id) }}"
-                        method="POST">
+
+                    <form action="{{ route('admin_delete_room', $room->room_id) }}" method="POST">
                         @csrf
                         @method('DELETE')
 
-                        {{-- ใช้ปุ่มเปิด popup --}}
+                        {{-- ปุ่มเปิด popup --}}
                         <button type="button"
                             class="btn-delete-room"
                             onclick="openDeletePopup(this, '{{ $room->room_name }}')">
                             ลบ
                         </button>
                     </form>
+
                 </div>
+
 
             </div>
 

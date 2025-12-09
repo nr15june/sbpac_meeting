@@ -13,7 +13,6 @@
     .booking-header {
         display: flex;
         align-items: center;
-        /* เดิมเป็น space-between → เอาออกให้ชิดซ้ายเหมือน room */
         justify-content: flex-start;
         margin-bottom: 1.5rem;
         padding: 1rem 1.5rem;
@@ -27,7 +26,6 @@
         display: flex;
         align-items: center;
         gap: 1rem;
-        /* แบบเดียวกับ create-room-header-left */
     }
 
     .booking-header-icon {
@@ -43,13 +41,9 @@
 
     .booking-header-title {
         font-size: 1.2rem;
-        /* ให้เท่ากับ create-room-title */
         font-weight: 600;
         color: #1f2933;
-        /* เทาเข้ม เหมือน room */
-        margin: 0;
     }
-
 
     /* กล่องฟอร์ม */
     .card-box {
@@ -99,11 +93,6 @@
         box-shadow: 0 0 0 1px #38bdf833;
     }
 
-    .form-textarea {
-        resize: vertical;
-        min-height: 90px;
-    }
-
     /* ปุ่มจอง */
     .booking-actions {
         display: flex;
@@ -112,25 +101,103 @@
     }
 
     .btn-submit-booking {
-        padding: 0.6rem 3rem;
-        border-radius: 999px;
+        padding: 0.5rem 1.4rem;
+        border-radius: 8px;
         border: none;
-        background-color: #50C65E;
+        background-color: #FFE04B;
         font-size: 0.9rem;
         font-weight: 600;
         color: #ffffff;
         cursor: pointer;
-        box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);
     }
 
     .btn-submit-booking:hover {
-        background-color: #45b154;
+        background-color: #f2c739;
     }
+
+    /* ==== ส่วนแสดง error (กรอบแดง) ==== */
+    .input-error {
+        border-color: #f97373;
+        background-color: #fef2f2;
+    }
+
+    /* ===== Popup Confirm ===== */
+    .popup-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .popup-box {
+        background: #fff;
+        padding: 2rem 2.5rem;
+        border-radius: 14px;
+        text-align: center;
+        width: 350px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .popup-icon-circle {
+        width: 70px;
+        height: 70px;
+        border-radius: 9999px;
+        border: 3px solid #7ED957;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.2rem auto;
+    }
+
+    .popup-icon-circle i {
+        font-size: 2.2rem;
+        color: #7ED957;
+    }
+
+    .popup-text {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #111827;
+    }
+
+    .btn-cancel {
+        padding: 0.5rem 1.4rem;
+        background: #BDBDBD;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+    .btn-cancel:hover {
+        background: #a8a8a8ff;
+    }
+
+    .btn-confirm {
+        padding: 0.5rem 1.4rem;
+        background: #7ED957;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        border: none;
+    }
+    .btn-confirm:hover {
+        background: #6CB94C;
+    }
+
 </style>
 
 {{-- ========== ส่วน HTML + Blade (เนื้อหา) ========== --}}
 @section('content')
 <div class="booking-wrapper">
+
+    {{-- แถบแจ้งเตือนเมื่อกรอกไม่ครบ (ควบคุมด้วย JS) --}}
+    <div id="client-error-banner"
+         style="display:none; margin-bottom: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem;
+                background-color:#FEF2F2; color:#B91C1C; font-size:0.85rem;">
+        <strong>กรุณากรอกข้อมูลให้ครบถ้วน</strong>
+    </div>
 
     {{-- แถบหัวข้อหน้า --}}
     <div class="booking-header">
@@ -142,7 +209,6 @@
         </div>
     </div>
 
-
     <form action="{{ route('booking.store') }}" method="POST">
         @csrf
 
@@ -153,46 +219,61 @@
             </div>
             <div class="card-body">
 
-                {{-- วันที่ / เวลา (ยังใช้ grid ของ Tailwind ไว้ได้) --}}
+                {{-- วันที่ / เวลา --}}
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
-                        <label class="form-label">วันที่ใช้ห้อง</label>
-                        <input type="date" name="use_date" class="form-input">
+                        <label class="form-label">
+                            วันที่ใช้ห้อง <span style="color:red">*</span>
+                        </label>
+                        <input type="date"
+                               name="use_date"
+                               class="form-input @error('use_date') input-error @enderror"
+                               value="{{ old('use_date') }}">
                     </div>
                     <div>
-                        <label class="form-label">เวลาเริ่ม</label>
-                        <input type="time" name="start_time" class="form-input">
+                        <label class="form-label">
+                            เวลาเริ่ม <span style="color:red">*</span>
+                        </label>
+                        <input type="time"
+                               name="start_time"
+                               class="form-input @error('start_time') input-error @enderror"
+                               value="{{ old('start_time') }}">
                     </div>
                     <div>
-                        <label class="form-label">เวลาสิ้นสุด</label>
-                        <input type="time" name="end_time" class="form-input">
+                        <label class="form-label">
+                            เวลาสิ้นสุด <span style="color:red">*</span>
+                        </label>
+                        <input type="time"
+                               name="end_time"
+                               class="form-input @error('end_time') input-error @enderror"
+                               value="{{ old('end_time') }}">
                     </div>
                 </div>
 
-                {{-- ห้องประชุม --}}
+                {{-- ห้องประชุม (ล็อกจากปุ่มจองห้องนี้) --}}
                 <div class="mb-4">
                     <label class="form-label">ห้องประชุม</label>
-                    <select name="room_id" class="form-select">
-                        <option value="">-- เลือกห้องประชุม --</option>
-                        @isset($rooms)
-                        @foreach($rooms as $room)
-                        <option value="{{ $room->room_id }}"
-                            {{ request('room_id') == $room->room_id ? 'selected' : '' }}>
-                            {{ $room->room_name }}
-                        </option>
-                        @endforeach
-                        @else
-                        <option value="1">ห้องประชุม 1</option>
-                        @endisset
-                    </select>
+
+                    {{-- ซ่อน room_id ไว้ส่งไป Controller --}}
+                    <input type="hidden" name="room_id" value="{{ $room->room_id }}">
+
+                    {{-- แสดงชื่อห้อง (แก้ไม่ได้) --}}
+                    <input type="text"
+                           class="form-input bg-gray-100"
+                           value="{{ $room->room_name }}"
+                           disabled>
                 </div>
 
                 {{-- หัวข้อการประชุม --}}
                 <div>
-                    <label class="form-label">หัวข้อการประชุม</label>
-                    <input type="text" name="meeting_topic"
-                        class="form-input"
-                        placeholder="ระบุหัวข้อการประชุม">
+                    <label class="form-label">
+                        หัวข้อการประชุม <span style="color:red">*</span>
+                    </label>
+                    <input type="text"
+                           name="meeting_topic"
+                           class="form-input @error('meeting_topic') input-error @enderror"
+                           value="{{ old('meeting_topic') }}"
+                           placeholder="ระบุหัวข้อการประชุม">
                 </div>
             </div>
         </div>
@@ -204,38 +285,56 @@
             </div>
             <div class="card-body">
                 <div class="mb-4">
-                    <label class="form-label">กลุ่มงาน / ส่วนงาน</label>
-                    <input type="text" name="department"
-                        class="form-input"
-                        placeholder="เช่น กลุ่มงานบริหารงบประมาณ">
+                    <label class="form-label">
+                        กลุ่มงาน / ส่วนงาน <span style="color:red">*</span>
+                    </label>
+                    <input type="text"
+                           name="department"
+                           class="form-input @error('department') input-error @enderror"
+                           value="{{ old('department') }}"
+                           placeholder="เช่น กลุ่มงานบริหารงบประมาณ">
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label class="form-label">ชื่อ</label>
-                        <input type="text" name="first_name" class="form-input">
+                        <label class="form-label">
+                            ชื่อ <span style="color:red">*</span>
+                        </label>
+                        <input type="text"
+                               name="first_name"
+                               class="form-input @error('first_name') input-error @enderror"
+                               value="{{ old('first_name') }}">
                     </div>
                     <div>
-                        <label class="form-label">นามสกุล</label>
-                        <input type="text" name="last_name" class="form-input">
+                        <label class="form-label">
+                            นามสกุล <span style="color:red">*</span>
+                        </label>
+                        <input type="text"
+                               name="last_name"
+                               class="form-input @error('last_name') input-error @enderror"
+                               value="{{ old('last_name') }}">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label class="form-label">เบอร์โทร</label>
-                        <input type="text" name="phone" class="form-input">
+                        <label class="form-label">
+                            เบอร์โทร <span style="color:red">*</span>
+                        </label>
+                        <input type="text"
+                               name="phone"
+                               class="form-input @error('phone') input-error @enderror"
+                               value="{{ old('phone') }}">
                     </div>
                     <div>
-                        <label class="form-label">อีเมล</label>
-                        <input type="email" name="email" class="form-input">
+                        <label class="form-label">
+                            อีเมล <span style="color:red">*</span>
+                        </label>
+                        <input type="email"
+                               name="email"
+                               class="form-input @error('email') input-error @enderror"
+                               value="{{ old('email') }}">
                     </div>
-                </div>
-
-                <div>
-                    <label class="form-label">รายละเอียดเพิ่มเติม</label>
-                    <textarea name="note" class="form-textarea"
-                        placeholder="เช่น ต้องการอุปกรณ์เพิ่มเติม, การจัดรูปแบบโต๊ะ ฯลฯ"></textarea>
                 </div>
             </div>
         </div>
@@ -248,4 +347,83 @@
         </div>
     </form>
 </div>
+
+{{-- ===== Popup Confirm ===== --}}
+<div id="confirmPopup" class="popup-overlay" style="display: none;">
+    <div class="popup-box">
+        <div class="popup-icon-circle">
+            <i class="bi bi-question-lg"></i>
+        </div>
+
+        <div class="popup-text" style="margin-bottom: 1.2rem;">
+            ต้องการจองห้องประชุมหรือไม่?
+        </div>
+
+        <div style="display:flex; gap:1rem; justify-content:center;">
+            <button type="button" class="btn-cancel" onclick="closeConfirmPopup()">ยกเลิก</button>
+            <button type="button" class="btn-confirm" onclick="submitForm()">ตกลง</button>
+        </div>
+    </div>
+</div>
+
+{{-- ยืนยันก่อนบันทึก --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form   = document.querySelector('form');
+    const banner = document.getElementById('client-error-banner');
+    const popup  = document.getElementById('confirmPopup');
+
+    // ฟังก์ชันปิด popup
+    window.closeConfirmPopup = function () {
+        popup.style.display = 'none';
+    };
+
+    // ฟังก์ชันยืนยันส่งฟอร์ม
+    window.submitForm = function () {
+        popup.style.display = 'none';
+        form.submit();
+    };
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault(); // กันไม่ให้ส่งฟอร์มทันที
+
+        // ====== 1) ตรวจข้อมูลว่าครบไหม ======
+        let requiredFields = [
+            'use_date',
+            'start_time',
+            'end_time',
+            'meeting_topic',
+            'department',
+            'first_name',
+            'last_name',
+            'phone',
+            'email'
+        ];
+
+        let isValid = true;
+
+        requiredFields.forEach(function (field) {
+            let input = form.querySelector(`[name="${field}"]`);
+
+            if (input && input.value.trim() === '') {
+                input.classList.add('input-error');
+                isValid = false;
+            } else if (input) {
+                input.classList.remove('input-error');
+            }
+        });
+
+        // ถ้ายังไม่ครบ → แสดงแถบด้านบน & ไม่เปิด popup
+        if (!isValid) {
+            if (banner) banner.style.display = 'block';
+            return;
+        }
+
+        // กรอกครบแล้ว ซ่อนแถบเตือน (ถ้าเคยแสดงมาก่อน) และเปิด popup
+        if (banner) banner.style.display = 'none';
+        popup.style.display = 'flex';
+    });
+});
+</script>
+
 @endsection

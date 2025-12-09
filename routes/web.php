@@ -5,6 +5,8 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminRoomController;
 use App\Models\Room;
+use App\Models\Booking;
+use Illuminate\Http\Request;
 
 //-------หน้าแรก-------//
 Route::get('/', function () {
@@ -13,34 +15,50 @@ Route::get('/', function () {
 
 //---------------------------------user---------------------------------------//
 
-//-------หน้า Tapbar user-------//
-// Route::get('/tapbar', function () {
-//     return view('user.tapbar');
-// })->name('tapbar');
-
 //-------หน้าปฏิทินการใช้ห้อง-------//
 Route::get('/calendar', function () {
     return view('user.calendar');
 })->name('calendar');
 
 //-------หน้าจองห้อง-------//
-Route::get('/room', function () {
-    $rooms = Room::all();                
-    return view('user.room', compact('rooms'));  
+Route::get('/user/room', function () {
+    $rooms = Room::all();
+    return view('user.room', compact('rooms'));
 })->name('user_rooms');
 
-Route::get('/create_booking', function () {
-    return view('user.create_booking');
-})->name('create_booking');
+Route::get('/create_booking/{room_id}', [BookingController::class, 'create'])
+    ->name('create_booking');
 
 Route::post('/booking/store', [BookingController::class, 'store'])
-        ->name('booking.store');
+    ->name('booking.store');
 
 //-------หน้าประวัติการจอง-------//
-Route::get('/history_booking', function () {
-    return view('user.history_booking');
-})->name('history_booking');
+Route::get('/user/history_booking', function (Request $request) {
+    $q = $request->input('q');  // ค่าที่พิมพ์ในช่องค้นหา
 
+    $bookings = Booking::with('room')
+        ->when($q, function ($query) use ($q) {
+            $query->where(function ($sub) use ($q) {
+                $sub->where('name', 'like', "%{$q}%")
+                    ->orWhere('lastname', 'like', "%{$q}%")
+                    ->orWhereRaw("CONCAT(name, ' ', lastname) LIKE ?", ["%{$q}%"]);
+            });
+        })
+        ->orderBy('start_time', 'desc')
+        ->get();
+
+    return view('user.history_booking', [
+        'bookings' => $bookings,
+        'q'        => $q,
+    ]);
+})->name('user_history_booking');
+
+//-------หน้ารายละเอียดการจอง-------//
+Route::get('/user/history_booking/detail/{id}', function ($id) {
+    $booking = Booking::with('room')->findOrFail($id);  // ตอนนี้จะ where booking_id = $id ให้เอง
+
+    return view('user.detail_history', compact('booking'));
+})->name('user_history_detail');
 //---------------------------------admin---------------------------------------//
 
 //-------หน้าสำหรับเจ้าหน้าที่-------//
@@ -52,13 +70,6 @@ Route::get('/login', function () {
 Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
-// Route::get('/admin/dashboard', function () { 
-//     if (!session('admin_logged_in')) {
-//         return redirect()->route('admin.login');
-//     }
-//     return 'ยินดีต้อนรับเข้าสู่หน้า Admin Dashboard';
-// })->name('admin_calendar'); 
-
 
 //-------หน้าปฏิทินการใช้ห้อง-------//
 Route::get('/admin/calendar', function () {
@@ -66,7 +77,7 @@ Route::get('/admin/calendar', function () {
 })->name('admin_calendar');
 
 Route::post('/admin/rooms/store', [AdminRoomController::class, 'store'])
-     ->name('rooms.store');
+    ->name('rooms.store');
 
 
 //-------หน้าห้องประชุม-------//
@@ -89,9 +100,41 @@ Route::put('/admin/rooms/{room_id}', [AdminRoomController::class, 'update'])
 
 
 //-------หน้าประวัติการจอง-------//
-Route::get('/admin/history_booking', function () {
-    return view('admin.history_booking');
+Route::get('/admin/history_booking', function (Request $request) {
+    $q = $request->input('q');  // ค่าที่พิมพ์ในช่องค้นหา
+
+    $bookings = Booking::with('room')
+        ->when($q, function ($query) use ($q) {
+            $query->where(function ($sub) use ($q) {
+                $sub->where('name', 'like', "%{$q}%")
+                    ->orWhere('lastname', 'like', "%{$q}%")
+                    ->orWhereRaw("CONCAT(name, ' ', lastname) LIKE ?", ["%{$q}%"]);
+            });
+        })
+        ->orderBy('start_time', 'desc')
+        ->get();
+
+    return view('admin.history_booking', [
+        'bookings' => $bookings,
+        'q'        => $q,
+    ]);
 })->name('admin_history_booking');
 
+//-------หน้ารายละเอียดการจอง-------//
+Route::get('/admin/history_booking/detail/{id}', function ($id) {
+    $booking = Booking::with('room')->findOrFail($id);
 
+    return view('admin.detail_history', compact('booking'));
+})->name('admin_history_detail');
 
+// แก้ไขการจอง
+Route::get('/admin/booking/{id}/edit', [BookingController::class, 'edit'])
+    ->name('admin_edit_booking');
+
+// บันทึกแก้ไข
+Route::put('/admin/booking/{id}', [BookingController::class, 'update'])
+    ->name('admin_update_booking');
+
+// ลบการจอง
+Route::delete('/admin/booking/{id}', [BookingController::class, 'destroy'])
+    ->name('admin_delete_booking');

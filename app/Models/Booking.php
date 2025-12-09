@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-    protected $table = 'bookings';       // ชื่อตาราง
-    protected $primaryKey = 'booking_id'; // PK ที่เราใช้เอง
+
+    protected $table = 'bookings';
+    protected $primaryKey = 'booking_id';
 
     protected $fillable = [
         'name',
@@ -18,7 +19,16 @@ class Booking extends Model
         'meeting_topic',
         'start_time',
         'end_time',
-        'status',
         'room_id',
+    ];
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class, 'room_id', 'room_id');
+    }
+
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time'   => 'datetime',
     ];
 }

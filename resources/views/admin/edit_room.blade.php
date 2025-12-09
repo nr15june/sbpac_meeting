@@ -130,8 +130,8 @@
     }
 
     .btn-submit {
-        padding: 0.6rem 2.5rem;
-        border-radius: 9999px;
+        padding: 0.5rem 1.4rem;
+        border-radius: 8px;
         border: none;
         background-color: #FFE04B;
         font-size: 0.875rem;

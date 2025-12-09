@@ -77,7 +77,7 @@
                     </a>
 
                     <!-- ประวัติการจอง -->
-                    <a href="{{ route('history_booking') }}"
+                    <a href="{{ route('user_history_booking') }}"
                         class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-clock-history mr-2 text-white"></i>
                         <span>ประวัติการจอง</span>
