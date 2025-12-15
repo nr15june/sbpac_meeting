@@ -11,7 +11,6 @@
         padding: 0 1rem;
     }
 
-    /* header */
     .detail-header {
         display: flex;
         align-items: center;
@@ -118,7 +117,6 @@
         color: #111827;
     }
 
-    /* ===== Popup ลบการจอง ===== */
     .popup-overlay-del {
         position: fixed;
         inset: 0;

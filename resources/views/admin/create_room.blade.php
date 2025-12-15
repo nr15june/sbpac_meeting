@@ -52,7 +52,6 @@
         background-color: #f3f4f6;
     }
 
-    /* กล่องฟอร์ม */
     .create-room-card {
         background-color: #ffffff;
         border: 1px solid #e9eaebff;
@@ -73,7 +72,6 @@
         padding: 1.5rem;
     }
 
-    /* ฟอร์ม */
     .form-group {
         margin-bottom: 1rem;
     }
@@ -109,7 +107,6 @@
         min-height: 6rem;
     }
 
-    /* แบ่งคอลัมน์ อาคาร + จำนวนคน */
     .form-row {
         display: grid;
         grid-template-columns: 1fr;
@@ -122,7 +119,6 @@
         }
     }
 
-    /* ปุ่มบันทึก */
     .btn-submit-wrapper {
         padding-top: 0.5rem;
         display: flex;
@@ -130,10 +126,10 @@
     }
 
     .btn-submit {
-        padding: 0.6rem 2.5rem;
-        border-radius: 9999px;
+        padding: 0.45rem 1.2rem;
+        border-radius: 8px;
         border: none;
-        background-color: #FFE04B;
+        background-color: #F5D020;
         font-size: 0.875rem;
         font-weight: 600;
         color: #111827;
@@ -144,7 +140,6 @@
         background-color: #f2c739;
     }
 
-    /* ปุ่มใน popup */
     .btn-cancel {
         padding: 0.5rem 1.4rem;
         background: #BDBDBD;
@@ -168,7 +163,6 @@
         background: #6CB94C;
     }
 
-    /* ===== Popup Confirm แบบสวย ===== */
     .popup-overlay {
         position: fixed;
         inset: 0;

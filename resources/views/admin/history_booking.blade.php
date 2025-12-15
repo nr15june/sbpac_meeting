@@ -128,14 +128,13 @@
         text-align: center;
     }
 
-    /* ปุ่มรายละเอียด */
     .btn-detail {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         padding: 0.3rem 0.9rem;
         border-radius: 999px;
-        background-color: #FACC15;
+        background-color: #F5D020;
         color: #ffffff;
         font-size: 0.8rem;
         font-weight: 600;
@@ -145,7 +144,7 @@
     }
 
     .btn-detail:hover {
-        background-color: #EAB308;
+        background-color: #f2c739;
     }
 
     .text-center {

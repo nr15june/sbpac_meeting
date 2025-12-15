@@ -58,14 +58,13 @@
         font-size: 1.2rem;
         font-weight: 600;
         color: #1f2933;
-        /* เทาเข้ม */
     }
 
     .btn-add-room {
         display: inline-flex;
         align-items: center;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
+        padding: 0.45rem 1.2rem;
+        border-radius: 8px;
         background-color: #F5D020;
         color: #111827;
         font-size: 0.875rem;
@@ -78,7 +77,6 @@
         background-color: #f2c739;
     }
 
-    /* ถ้าไม่มีห้อง */
     .room-empty {
         background-color: #ffffff;
         border: 1px solid #e5e7eb;
@@ -182,20 +180,17 @@
         background-color: #e05959ff;
     }
 
-    /* ให้การ์ดเล็กลงในจอมือถือ */
     @media (max-width: 640px) {
         .room-card {
             width: 100%;
         }
     }
 
-    /* ===== Popup ลบห้อง ===== */
     .popup-overlay-del {
         position: fixed;
         inset: 0;
         background: rgba(0, 0, 0, 0.45);
         display: none;
-        /* เริ่มต้นซ่อน */
         align-items: center;
         justify-content: center;
         z-index: 9999;
@@ -216,7 +211,6 @@
         height: 70px;
         border-radius: 9999px;
         border: 3px solid #F87171;
-        /* แดงอ่อน */
         display: flex;
         align-items: center;
         justify-content: center;

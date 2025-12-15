@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="utf-8">
+    <title>@yield('title', 'เพิ่มห้องประชุม | ศอ.บต.')</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/sbpac-logo.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -56,7 +58,7 @@
 
                 <nav class="text-sm">
                     <!-- ปฏิทินการใช้ห้อง -->
-                    <a href="{{ route('calendar') }}"
+                    <a href="{{ route('user_calendar') }}"
                         class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-house-door-fill mr-2 text-white"></i>
                         <span>ปฏิทินการใช้ห้อง</span>

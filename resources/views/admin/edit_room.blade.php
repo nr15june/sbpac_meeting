@@ -12,7 +12,6 @@
         padding: 0 1rem;
     }
 
-    /* แถบหัวข้อ */
     .create-room-header {
         display: flex;
         align-items: center;
@@ -45,14 +44,13 @@
     .create-room-title {
         font-size: 1.2rem;
         font-weight: 600;
-        color: #1f2933; /* เทาเข้ม */
+        color: #1f2933; 
     }
 
     .btn-back:hover {
         background-color: #f3f4f6;
     }
 
-    /* กล่องฟอร์ม */
     .create-room-card {
         background-color: #ffffff;
         border: 1px solid #e9eaebff;
@@ -73,7 +71,6 @@
         padding: 1.5rem;
     }
 
-    /* ฟอร์ม */
     .form-group {
         margin-bottom: 1rem;
     }
@@ -122,7 +119,6 @@
         }
     }
 
-    /* ปุ่มบันทึก */
     .btn-submit-wrapper {
         padding-top: 0.5rem;
         display: flex;
@@ -168,7 +164,6 @@
         background: #6CB94C;
     }
 
-    /* ===== Popup Confirm แบบสวย ===== */
     .popup-overlay {
         position: fixed;
         inset: 0;

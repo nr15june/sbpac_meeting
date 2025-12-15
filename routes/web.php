@@ -7,6 +7,8 @@ use App\Http\Controllers\AdminRoomController;
 use App\Models\Room;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use App\Http\Controllers\CalendarController;
+
 
 //-------หน้าแรก-------//
 Route::get('/', function () {
@@ -16,9 +18,8 @@ Route::get('/', function () {
 //---------------------------------user---------------------------------------//
 
 //-------หน้าปฏิทินการใช้ห้อง-------//
-Route::get('/calendar', function () {
-    return view('user.calendar');
-})->name('calendar');
+Route::get('/user/calendar', [CalendarController::class, 'userIndex'])->name('user_calendar');
+Route::get('/user/calendar/day/{date}', [CalendarController::class, 'userDay'])->name('user_calendar_day');
 
 //-------หน้าจองห้อง-------//
 Route::get('/user/room', function () {
@@ -72,15 +73,12 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.
 
 
 //-------หน้าปฏิทินการใช้ห้อง-------//
-Route::get('/admin/calendar', function () {
-    return view('admin.calendar');
-})->name('admin_calendar');
+Route::get('/admin/calendar', [CalendarController::class, 'adminIndex'])->name('admin_calendar');
+Route::get('/admin/calendar/day/{date}', [CalendarController::class, 'adminDay'])->name('admin_calendar_day');
 
+//-------หน้า ห้องประชุม-------//
 Route::post('/admin/rooms/store', [AdminRoomController::class, 'store'])
     ->name('rooms.store');
-
-
-//-------หน้าห้องประชุม-------//
 // Admin Meeting Rooms
 Route::get('/admin/meetingrooms', [AdminRoomController::class, 'index'])
     ->name('admin_meetingrooms');
@@ -138,3 +136,4 @@ Route::put('/admin/booking/{id}', [BookingController::class, 'update'])
 // ลบการจอง
 Route::delete('/admin/booking/{id}', [BookingController::class, 'destroy'])
     ->name('admin_delete_booking');
+

@@ -11,7 +11,6 @@
         padding: 0 1rem;
     }
 
-    /* header */
     .detail-header {
         display: flex;
         align-items: center;
@@ -46,7 +45,6 @@
         color: #1f2933;
     }
 
-    /* กล่องข้อมูล */
     .detail-box {
         background: #ECECEC;
         border-radius: 12px;
@@ -116,7 +114,6 @@
         max-width: 170px;
     }
 
-    /* ปุ่มล่างขวา */
     .detail-actions {
         display: flex;
         justify-content: flex-end;
@@ -165,13 +162,11 @@
         background-color: #6b7280;
     }
 
-    /* ===== Popup Confirm ===== */
     .popup-overlay {
         position: fixed;
         inset: 0;
         background: rgba(0, 0, 0, 0.35);
         display: none;
-        /* เริ่มต้นซ่อน */
         align-items: center;
         justify-content: center;
         z-index: 9999;

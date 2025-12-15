@@ -90,15 +90,12 @@
     .room-actions {
         display: flex;
         justify-content: flex-end;
-        /* ปุ่มไปด้านขวา */
         margin-top: 0.3rem;
     }
 
-    /* ปุ่มสีเหลือง */
     .btn-book-room {
         padding: 0.45rem 1.2rem;
-        background-color: #FACC15;
-        /* เหลืองทองสวย */
+        background-color: #F5D020;
         color: #ffffff;
         border-radius: 8px;
         font-size: 0.85rem;
@@ -108,8 +105,7 @@
     }
 
     .btn-book-room:hover {
-        background-color: #EAB308;
-        /* เหลืองเข้ม */
+        background-color: #f2c739;
     }
 </style>
 
