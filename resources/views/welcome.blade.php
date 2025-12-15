@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <title>@yield('title', 'เพิ่มห้องประชุม | ศอ.บต.')</title>
+    <title>@yield('title', 'ระบบจองห้องประชุม | ศอ.บต.')</title>
     <link rel="icon" type="image/png" href="{{ asset('images/sbpac-logo.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 

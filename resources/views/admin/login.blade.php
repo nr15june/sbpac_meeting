@@ -1,8 +1,9 @@
 <!doctype html>
 <html lang="th">
+
 <head>
     <meta charset="utf-8">
-    <title>@yield('title', 'เพิ่มห้องประชุม | ศอ.บต.')</title>
+    <title>@yield('title', 'เข้าสู่ระบบจองห้องประชุม | ศอ.บต.')</title>
     <link rel="icon" type="image/png" href="{{ asset('images/sbpac-logo.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -13,6 +14,7 @@
         * {
             box-sizing: border-box;
         }
+
         body {
             margin: 0;
             min-height: 100vh;
@@ -29,7 +31,7 @@
             width: 470px;
             max-width: 90%;
             padding: 40px 40px 45px;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
         }
 
         .logo-row {
@@ -84,7 +86,7 @@
 
         .form-control:focus {
             border-color: #999;
-            box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
         }
 
         .btn-login {
@@ -117,45 +119,64 @@
             margin-bottom: 10px;
             text-align: center;
         }
+
+        .logo-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-link:hover .logo-text-th {
+            text-decoration: underline;
+        }
+
+        .logo-link:active {
+            transform: translateY(1px);
+        }
     </style>
 </head>
+
 <body>
 
-<div class="login-wrapper">
-    <div class="logo-row">
-        <img src="{{ asset('images/sbpac-logo.png') }}" alt="SBPAC Logo">
-        <div>
-            <div class="logo-text-th">
-                ศูนย์อำนวยการบริหารจังหวัดชายแดนภาคใต้
+    <div class="login-wrapper">
+        <a href="{{ route('user_calendar') }}" class="logo-link">
+            <div class="logo-row">
+                <img src="{{ asset('images/sbpac-logo.png') }}" alt="SBPAC Logo">
+                <div>
+                    <div class="logo-text-th">
+                        ศูนย์อำนวยการบริหารจังหวัดชายแดนภาคใต้
+                    </div>
+                    <div class="logo-text-en">
+                        Southern Border Provinces Administrative Centre
+                    </div>
+                </div>
             </div>
-            <div class="logo-text-en">
-                Southern Border Provinces Administrative Centre
-            </div>
-        </div>
-    </div>
+        </a>
 
-    {{-- แสดง error ถ้า login ไม่ผ่าน --}}
-    @if (session('error'))
+
+        {{-- แสดง error ถ้า login ไม่ผ่าน --}}
+        @if (session('error'))
         <div class="error-msg">
             {{ session('error') }}
         </div>
-    @endif
+        @endif
 
-    <form action="{{ route('admin.login.submit') }}" method="POST">
-        @csrf
-        <div class="form-group">
-            <div class="form-label">Email</div>
-            <input type="email" name="email" class="form-control" placeholder="email" required>
-        </div>
+        <form action="{{ route('admin.login.submit') }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <div class="form-label">Email</div>
+                <input type="email" name="email" class="form-control" placeholder="email" required>
+            </div>
 
-        <div class="form-group">
-            <div class="form-label">Password</div>
-            <input type="password" name="password" class="form-control" placeholder="password" required>
-        </div>
+            <div class="form-group">
+                <div class="form-label">Password</div>
+                <input type="password" name="password" class="form-control" placeholder="password" required>
+            </div>
 
-        <button type="submit" class="btn-login">LOGIN</button>
-    </form>
-</div>
+            <button type="submit" class="btn-login">LOGIN</button>
+        </form>
+    </div>
 
 </body>
+
 </html>
