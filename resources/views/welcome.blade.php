@@ -51,7 +51,7 @@
             {{-- ปุ่มจองห้องประชุม --}}
             <div class="mt-10">
                 <a
-                    href="{{ route('calendar') }}"
+                    href="{{ route('user_calendar') }}"
                     class="inline-flex items-center justify-center px-10 py-4 rounded-full text-white text-base md:text-lg font-medium
                            bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-300
                            shadow-md transition"
