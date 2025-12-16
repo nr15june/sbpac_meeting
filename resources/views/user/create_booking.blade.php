@@ -5,7 +5,7 @@
 {{-- ========== ส่วน CSS ========== --}}
 <style>
     .booking-wrapper {
-        max-width: 1000px;
+        max-width: 1100px;
         margin: 0 auto;
         padding: 0 1rem;
     }
@@ -286,7 +286,7 @@
             <div class="card-body">
                 <div class="mb-4">
                     <label class="form-label">
-                        กลุ่มงาน / ส่วนงาน <span style="color:red">*</span>
+                        กลุ่มงาน <span style="color:red">*</span>
                     </label>
                     <input type="text"
                            name="department"
@@ -326,7 +326,7 @@
                                class="form-input @error('phone') input-error @enderror"
                                value="{{ old('phone') }}">
                     </div>
-                    <div>
+                    <!-- <div>
                         <label class="form-label">
                             อีเมล <span style="color:red">*</span>
                         </label>
@@ -334,7 +334,7 @@
                                name="email"
                                class="form-input @error('email') input-error @enderror"
                                value="{{ old('email') }}">
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -397,7 +397,6 @@ document.addEventListener('DOMContentLoaded', function () {
             'first_name',
             'last_name',
             'phone',
-            'email'
         ];
 
         let isValid = true;

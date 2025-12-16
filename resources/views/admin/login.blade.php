@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>@yield('title', 'เข้าสู่ระบบจองห้องประชุม | ศอ.บต.')</title>
+    <title>@yield('title', 'เข้าสู่ระบบผู้ดูแลระบบ | ระบบจองห้องประชุม ศอ.บต.')</title>
     <link rel="icon" type="image/png" href="{{ asset('images/sbpac-logo.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -77,11 +77,6 @@
             border-radius: 3px;
             border: 1px solid #ddd;
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .form-control::placeholder {
-            color: #bbb;
         }
 
         .form-control:focus {
@@ -103,6 +98,7 @@
             color: #fff;
             background-color: #787878;
             letter-spacing: 1px;
+            cursor: pointer;
         }
 
         .btn-login:hover {
@@ -129,16 +125,14 @@
         .logo-link:hover .logo-text-th {
             text-decoration: underline;
         }
-
-        .logo-link:active {
-            transform: translateY(1px);
-        }
     </style>
 </head>
 
 <body>
 
     <div class="login-wrapper">
+
+        {{-- โลโก้ + กลับหน้าผู้ใช้ --}}
         <a href="{{ route('user_calendar') }}" class="logo-link">
             <div class="logo-row">
                 <img src="{{ asset('images/sbpac-logo.png') }}" alt="SBPAC Logo">
@@ -153,8 +147,14 @@
             </div>
         </a>
 
+        {{-- validation error --}}
+        @if ($errors->any())
+        <div class="error-msg">
+            {{ $errors->first() }}
+        </div>
+        @endif
 
-        {{-- แสดง error ถ้า login ไม่ผ่าน --}}
+        {{-- login error --}}
         @if (session('error'))
         <div class="error-msg">
             {{ session('error') }}
@@ -163,18 +163,31 @@
 
         <form action="{{ route('admin.login.submit') }}" method="POST">
             @csrf
+
             <div class="form-group">
                 <div class="form-label">Email</div>
-                <input type="email" name="email" class="form-control" placeholder="email" required>
+                <input type="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="email"
+                    value="{{ old('email') }}"
+                    required>
             </div>
 
             <div class="form-group">
                 <div class="form-label">Password</div>
-                <input type="password" name="password" class="form-control" placeholder="password" required>
+                <input type="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="password"
+                    required>
             </div>
 
-            <button type="submit" class="btn-login">LOGIN</button>
+            <button type="submit" class="btn-login">
+                LOGIN
+            </button>
         </form>
+
     </div>
 
 </body>

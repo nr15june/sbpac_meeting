@@ -6,7 +6,7 @@
 
 <style>
     .detail-wrapper {
-        max-width: 1000px;
+        max-width: 1100px;
         margin: 0 auto;
         padding: 0 1rem;
     }
@@ -227,11 +227,6 @@
             </tr>
 
             <tr>
-                <td class="label-cell">อีเมล :</td>
-                <td class="value-cell">{{ $booking->email }}</td>
-            </tr>
-
-            <tr>
                 <td class="label-cell">วันที่ใช้ห้อง :</td>
                 <td class="value-cell">
                     {{ $booking->start_time ? $booking->start_time->format('d/m/Y') : '-' }}
@@ -256,7 +251,7 @@
             </tr>
 
             <tr>
-                <td class="label-cell">กลุ่มงาน / ส่วนงาน :</td>
+                <td class="label-cell">กลุ่มงาน :</td>
                 <td class="value-cell">{{ $booking->department }}</td>
             </tr>
         </table>

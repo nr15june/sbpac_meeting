@@ -5,9 +5,8 @@
 @section('content')
 <style>
     .day-wrapper {
-        width: 100%;
-        max-width: 100%;
-        margin: 0;
+        max-width: 1100px;
+        margin: 0 auto;
         padding: 0 1rem;
     }
 
@@ -111,7 +110,7 @@ $thaiYear=(int)$day->format('Y')+543;
                     <th style="width:12%;">เวลาเริ่มต้น</th>
                     <th style="width:12%;">เวลาสิ้นสุด</th>
                     <th>หัวข้อการประชุม</th>
-                    <th style="width:20%;">กลุ่มงาน / ส่วนงาน</th>
+                    <th style="width:20%;">กลุ่มงาน</th>
                     <th style="width:18%;">ผู้จองห้องประชุม</th>
                 </tr>
             </thead>

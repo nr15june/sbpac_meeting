@@ -9,9 +9,8 @@
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -31,7 +30,7 @@
     <!-- Header -->
     <header class="w-full bg-[#D9D9D9] border-b border-gray-400">
         <div class="flex items-center px-6 py-3">
-            <img src="{{ asset('images/sbpac-logo.png') }}" class="w-12 h-12 mr-3">
+            <img src="{{ asset('images/sbpac-logo.png') }}" class="w-12 h-12 mr-3" alt="SBPAC">
 
             <div class="leading-tight">
                 <div class="text-base font-semibold text-gray-900">
@@ -71,8 +70,8 @@
                 </div>
 
                 <nav class="text-sm">
-                    <!-- จองห้องประชุม -->
-                    <a href="{{ route('user_rooms') }}"
+                    <!-- จองห้องประชุม (ถ้าไม่ login -> ไปหน้า user.login) -->
+                    <a href="{{ auth()->check() ? route('user_rooms') : route('user.login') }}"
                         class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-calendar2-event mr-2 text-white"></i>
                         <span>จองห้องประชุม</span>
@@ -91,22 +90,42 @@
                     บุคคล
                 </div>
 
-                <nav class="text-sm mb-4">
-                    <!-- สำหรับเจ้าหน้าที่ -->
+                <nav class="text-sm">
+                    {{-- สำหรับเจ้าหน้าที่ (โชว์ตอน user ยังไม่ login จะได้ไม่สับสน) --}}
+                    @guest
                     <a href="{{ route('login') }}"
                         class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-person-circle mr-2 text-white"></i>
                         <span>สำหรับเจ้าหน้าที่</span>
                     </a>
+                    @endguest
                 </nav>
+
+                {{-- ===== ส่วนล่างสุดของ Sidebar: Login/Logout ===== --}}
+                <div class="mt-auto border-t border-gray-600">
+
+                    @auth
+                    <form action="{{ route('user.logout') }}" method="POST" class="p-3">
+                        @csrf
+                        <button type="submit"
+                            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded
+                       bg-red-600 hover:bg-red-700 text-white text-sm">
+                            <i class="bi bi-box-arrow-right"></i>
+                            ออกจากระบบ
+                        </button>
+                    </form>
+                    @endauth
+
+                </div>
+
 
             </aside>
 
-        {{-- ================== พื้นที่แสดงเนื้อหาแต่ละหน้า ================== --}}
-        <main class="flex-1 bg-[#FFFFFF] p-6 overflow-y-auto">
-            @yield('content')
-        </main>
-        
+            {{-- ================== พื้นที่แสดงเนื้อหาแต่ละหน้า ================== --}}
+            <main class="flex-1 bg-[#FFFFFF] p-6 overflow-y-auto">
+                @yield('content')
+            </main>
+
         </div>
     </div>
 

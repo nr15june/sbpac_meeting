@@ -8,13 +8,11 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminAuthController extends Controller
 {
-    // แสดงหน้า login
     public function showLogin()
     {
         return view('admin.login');
     }
 
-    // ตรวจสอบข้อมูล login
     public function login(Request $request)
     {
         $request->validate([
@@ -22,18 +20,24 @@ class AdminAuthController extends Controller
             'password' => 'required',
         ]);
 
-        // หา admin ตาม email
         $admin = Admin::where('email', $request->email)->first();
 
-        // ถ้าไม่เจอ หรือ รหัสผ่านไม่ตรง
         if (!$admin || !Hash::check($request->password, $admin->password)) {
-            return back()->with('error', 'อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+            return back()->with('error', 'อีเมลหรือรหัสผ่านไม่ถูกต้อง')->withInput();
         }
 
-        // เก็บสถานะว่า login แล้ว
-        session(['admin_logged_in' => true, 'admin_id' => $admin->id]);
+        session([
+            'admin_logged_in' => true,
+            'admin_id' => $admin->id,
+            'admin_department_id' => $admin->department_id, 
+        ]);
 
-        // พาไปหน้า dashboard แอดมิน (คุณสร้าง view เองได้)
         return redirect()->route('admin_calendar');
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->forget(['admin_logged_in', 'admin_id', 'admin_department_id']);
+        return redirect()->route('user_calendar');
     }
 }

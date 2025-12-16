@@ -7,7 +7,7 @@
 {{-- ====== CSS สำหรับหน้านี้ ====== --}}
 <style>
     .room-wrapper {
-        max-width: 1000px;
+        max-width: 1100px;
         margin: 0 auto;
         padding: 0 1rem;
     }
@@ -18,9 +18,7 @@
         padding: 0.5rem 1rem;
         border-radius: 0.375rem;
         background-color: #dcfce7;
-        /* green-100 */
         color: #166534;
-        /* green-800 */
         font-size: 0.875rem;
     }
 

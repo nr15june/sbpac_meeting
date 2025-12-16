@@ -8,7 +8,8 @@ use App\Models\Room;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CalendarController;
-
+use App\Http\Controllers\UserAuthController;     
+use App\Http\Controllers\AdminEmployeeController;
 
 //-------หน้าแรก-------//
 Route::get('/', function () {
@@ -20,6 +21,17 @@ Route::get('/', function () {
 //-------หน้าปฏิทินการใช้ห้อง-------//
 Route::get('/user/calendar', [CalendarController::class, 'userIndex'])->name('user_calendar');
 Route::get('/user/calendar/day/{date}', [CalendarController::class, 'userDay'])->name('user_calendar_day');
+
+//-------หน้า login ผู้ใช้งาน-------//
+Route::get('/user/login', function () {
+    return view('auth.user_login'); 
+})->name('user.login');
+
+//-------login ผู้ใช้งาน-------//
+Route::post('/user/login', [UserAuthController::class, 'login'])->name('user.login.submit');
+
+//-------logout ผู้ใช้งาน-------//
+Route::post('/user/logout', [UserAuthController::class, 'logout'])->name('user.logout');
 
 //-------หน้าจองห้อง-------//
 Route::get('/user/room', function () {
@@ -67,7 +79,7 @@ Route::get('/login', function () {
     return view('admin.login');
 })->name('login');
 
-// //-------login admin-------//
+//-------หน้าล็อกอินเจ้าหน้าที่-------//
 Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
@@ -75,6 +87,16 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.
 //-------หน้าปฏิทินการใช้ห้อง-------//
 Route::get('/admin/calendar', [CalendarController::class, 'adminIndex'])->name('admin_calendar');
 Route::get('/admin/calendar/day/{date}', [CalendarController::class, 'adminDay'])->name('admin_calendar_day');
+
+//-------หน้าจัดการพนักงาน-------//
+Route::get('/admin/employees', [AdminEmployeeController::class, 'index'])
+    ->name('admin_employees');
+
+Route::get('/admin/employees/create', [AdminEmployeeController::class, 'create'])
+    ->name('admin_create_employees');
+
+Route::post('/admin/employees', [AdminEmployeeController::class, 'store'])
+    ->name('admin_store_employees');
 
 //-------หน้า ห้องประชุม-------//
 Route::post('/admin/rooms/store', [AdminRoomController::class, 'store'])
@@ -137,3 +159,5 @@ Route::put('/admin/booking/{id}', [BookingController::class, 'update'])
 Route::delete('/admin/booking/{id}', [BookingController::class, 'destroy'])
     ->name('admin_delete_booking');
 
+//-------หน้าล็อกเอาท์เจ้าหน้าที่-------//
+Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');

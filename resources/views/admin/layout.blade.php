@@ -71,6 +71,13 @@
                 </div>
 
                 <nav class="text-sm">
+                    <!-- จัดการข้อมูลพนักงาน -->
+                    <a href="{{ route('admin_employees') }}"
+                        class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
+                        <i class="bi bi-people-fill mr-2 text-white"></i>
+                        <span>จัดการข้อมูลพนักงาน</span>
+                    </a>
+
                     <!-- ห้องประชุม -->
                     <a href="{{ route('admin_meetingrooms') }}"
                         class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
@@ -100,13 +107,25 @@
                     </a>
                 </nav>
 
+                <div class="mt-auto border-t border-gray-600 p-3">
+                    <form action="{{ route('admin.logout') }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded
+                       bg-yellow hover:bg-yellow-400 text-white text-sm">
+                            <i class="bi bi-box-arrow-right"></i>
+                            ออกจากระบบ
+                        </button>
+                    </form>
+                </div>
+
             </aside>
 
-        {{-- ================== พื้นที่แสดงเนื้อหาแต่ละหน้า ================== --}}
-        <main class="flex-1 bg-[#FFFFFF] p-6 overflow-y-auto">
-            @yield('content')
-        </main>
-        
+            {{-- ================== พื้นที่แสดงเนื้อหาแต่ละหน้า ================== --}}
+            <main class="flex-1 bg-[#FFFFFF] p-6 overflow-y-auto">
+                @yield('content')
+            </main>
+
         </div>
     </div>
 

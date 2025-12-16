@@ -6,7 +6,7 @@
 
 <style>
     .detail-wrapper {
-        max-width: 1000px;
+        max-width: 1100px;
         margin: 0 auto;
         padding: 0 1rem;
     }
@@ -162,6 +162,7 @@
         background-color: #6b7280;
     }
 
+
     .popup-overlay {
         position: fixed;
         inset: 0;
@@ -270,7 +271,7 @@
                     </td>
                 </tr>
 
-                {{-- อีเมล --}}
+                <!-- {{-- อีเมล --}}
                 <tr>
                     <td class="label-cell">อีเมล :</td>
                     <td class="value-cell">
@@ -279,7 +280,7 @@
                             class="form-input"
                             value="{{ old('email', $booking->email) }}">
                     </td>
-                </tr>
+                </tr> -->
 
                 {{-- วันที่ใช้ห้อง --}}
                 <tr>
