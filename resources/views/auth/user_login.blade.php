@@ -11,7 +11,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             min-height: 100vh;
@@ -21,6 +24,7 @@
             justify-content: center;
             align-items: center;
         }
+
         .login-wrapper {
             background-color: #FFFBFB;
             border-radius: 10px;
@@ -29,18 +33,43 @@
             padding: 40px 40px 45px;
             box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
         }
-        .logo-row { display: flex; align-items: center; margin-bottom: 28px; }
+
+        .logo-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
         .logo-row img {
-            width: 70px; height: 70px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             object-fit: cover;
             margin-right: 18px;
         }
-        .logo-text-th { font-size: 16px; font-weight: 700; line-height: 1.35; }
-        .logo-text-en { font-size: 12px; color: #555; margin-top: 3px; }
 
-        .form-group { margin-bottom: 18px; }
-        .form-label { font-size: 14px; margin-bottom: 5px; color: #444; }
+        .logo-text-th {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .logo-text-en {
+            font-size: 12px;
+            color: #555;
+            margin-top: 3px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #444;
+        }
+
         .form-control {
             width: 100%;
             padding: 10px 12px;
@@ -50,7 +79,11 @@
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .form-control::placeholder { color: #bbb; }
+
+        .form-control::placeholder {
+            color: #bbb;
+        }
+
         .form-control:focus {
             border-color: #999;
             box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
@@ -72,8 +105,14 @@
             letter-spacing: 1px;
             cursor: pointer;
         }
-        .btn-login:hover { background-color: #5f5f5f; }
-        .btn-login:active { transform: translateY(1px); }
+
+        .btn-login:hover {
+            background-color: #5f5f5f;
+        }
+
+        .btn-login:active {
+            transform: translateY(1px);
+        }
 
         .error-msg {
             color: #d00;
@@ -81,9 +120,20 @@
             margin-bottom: 10px;
             text-align: center;
         }
-        .logo-link { display: block; text-decoration: none; color: inherit; }
-        .logo-link:hover .logo-text-th { text-decoration: underline; }
-        .logo-link:active { transform: translateY(1px); }
+
+        .logo-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-link:hover .logo-text-th {
+            text-decoration: underline;
+        }
+
+        .logo-link:active {
+            transform: translateY(1px);
+        }
 
         .hint {
             text-align: center;
@@ -91,8 +141,14 @@
             font-size: 13px;
             color: #666;
         }
-        .hint a { color: #444; }
-        .hint a:hover { text-decoration: underline; }
+
+        .hint a {
+            color: #444;
+        }
+
+        .hint a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -113,31 +169,31 @@
 
         {{-- แสดง error แบบรวม (กรณีใส่ validation แล้วเด้งกลับมา) --}}
         @if ($errors->any())
-            <div class="error-msg">
-                {{ $errors->first() }}
-            </div>
+        <div class="error-msg">
+            {{ $errors->first() }}
+        </div>
         @endif
 
         {{-- แสดง error ถ้า login ไม่ผ่าน (ตามที่คุณใช้ session('error')) --}}
         @if (session('error'))
-            <div class="error-msg">
-                {{ session('error') }}
-            </div>
+        <div class="error-msg">
+            {{ session('error') }}
+        </div>
         @endif
-        
+
         <form action="{{ route('user.login.submit') }}" method="POST">
             @csrf
 
             <div class="form-group">
                 <div class="form-label">อีเมล</div>
                 <input type="email" name="email" class="form-control"
-                       placeholder="email" value="{{ old('email') }}" required>
+                    placeholder="email" value="{{ old('email') }}" required autocomplete="username">
             </div>
 
             <div class="form-group">
                 <div class="form-label">รหัสผ่าน</div>
                 <input type="password" name="password" class="form-control"
-                       placeholder="password" required>
+                    placeholder="password" required autocomplete="current-password">
             </div>
 
             <button type="submit" class="btn-login">เข้าสู่ระบบ</button>
@@ -150,4 +206,5 @@
     </div>
 
 </body>
+
 </html>

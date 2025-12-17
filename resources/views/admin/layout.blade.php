@@ -9,20 +9,16 @@
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
-    <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
     @endif
 
     <style>
-        body {
-            font-family: 'Sarabun', sans-serif;
-        }
+        body { font-family: 'Sarabun', sans-serif; }
     </style>
 </head>
 
@@ -32,7 +28,6 @@
     <header class="w-full bg-[#D9D9D9] border-b border-gray-400">
         <div class="flex items-center px-6 py-3">
             <img src="{{ asset('images/sbpac-logo.png') }}" class="w-12 h-12 mr-3">
-
             <div class="leading-tight">
                 <div class="text-base font-semibold text-gray-900">
                     ศูนย์อำนวยการบริหารจังหวัดชายแดนภาคใต้
@@ -48,7 +43,7 @@
     <div class="w-full h-[calc(100vh-64px)] bg-white">
         <div class="flex h-full">
 
-            <!-- ===== Sidebar ===== -->
+            <!-- Sidebar -->
             <aside class="w-64 bg-[#4C4C4C] text-gray-100 flex flex-col">
 
                 <!-- เมนูหลัก -->
@@ -57,9 +52,8 @@
                 </div>
 
                 <nav class="text-sm">
-                    <!-- ปฏิทินการใช้ห้อง -->
                     <a href="{{ route('admin_calendar') }}"
-                        class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
+                       class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-house-door-fill mr-2 text-white"></i>
                         <span>ปฏิทินการใช้ห้อง</span>
                     </a>
@@ -71,48 +65,53 @@
                 </div>
 
                 <nav class="text-sm">
-                    <!-- จัดการข้อมูลพนักงาน -->
                     <a href="{{ route('admin_employees') }}"
-                        class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
+                       class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-people-fill mr-2 text-white"></i>
                         <span>จัดการข้อมูลพนักงาน</span>
                     </a>
 
-                    <!-- ห้องประชุม -->
                     <a href="{{ route('admin_meetingrooms') }}"
-                        class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
+                       class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-calendar2-event mr-2 text-white"></i>
                         <span>ห้องประชุม</span>
                     </a>
 
-                    <!-- ประวัติการจอง -->
                     <a href="{{ route('admin_history_booking') }}"
-                        class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
+                       class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-clock-history mr-2 text-white"></i>
                         <span>ประวัติการจอง</span>
                     </a>
                 </nav>
 
-                <!-- บุคคล -->
+                <!-- ผู้ใช้งาน -->
                 <div class="bg-[#676767] px-4 py-2.5 text-xs tracking-wide text-gray-300 border-b border-gray-500 mt-1">
-                    บุคคล
+                    ผู้ใช้งาน
                 </div>
 
                 <nav class="text-sm mb-4">
-                    <!-- สำหรับเจ้าหน้าที่ -->
-                    <a href="{{ route('login') }}"
-                        class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
-                        <i class="bi bi-person-circle mr-2 text-white"></i>
-                        <span>สำหรับเจ้าหน้าที่</span>
-                    </a>
+                    <div class="px-4 py-3 border-b border-gray-600">
+                        <div class="flex items-start gap-2">
+                            <i class="bi bi-person-circle text-white text-lg mt-0.5"></i>
+                            <div class="leading-tight">
+                                <div class="text-sm font-semibold text-white">
+                                    {{ $adminName ?? 'Admin' }}
+                                </div>
+                                <div class="text-xs text-gray-300">
+                                    {{ $deptName ?? 'ไม่พบกลุ่มงาน' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </nav>
 
+                <!-- Logout -->
                 <div class="mt-auto border-t border-gray-600 p-3">
                     <form action="{{ route('admin.logout') }}" method="POST">
                         @csrf
                         <button type="submit"
                             class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded
-                       bg-yellow hover:bg-yellow-400 text-white text-sm">
+                                   bg-yellow hover:bg-yellow-400 text-white text-sm">
                             <i class="bi bi-box-arrow-right"></i>
                             ออกจากระบบ
                         </button>
@@ -121,7 +120,7 @@
 
             </aside>
 
-            {{-- ================== พื้นที่แสดงเนื้อหาแต่ละหน้า ================== --}}
+            <!-- Content -->
             <main class="flex-1 bg-[#FFFFFF] p-6 overflow-y-auto">
                 @yield('content')
             </main>
@@ -130,5 +129,4 @@
     </div>
 
 </body>
-
 </html>

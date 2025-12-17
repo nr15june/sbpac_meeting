@@ -131,7 +131,7 @@
 
     .room-card-footer {
         padding: 0.5rem 0.75rem;
-        background-color: #D6D6D6;
+        background-color: #e7e6e6ff;
         border-top: 1px solid #d4d4d4;
     }
 
@@ -145,37 +145,45 @@
     .room-actions {
         display: flex;
         justify-content: flex-end;
-        gap: 0.5rem;
+        align-items: center;
+        gap: .45rem;
     }
 
     .btn-edit-room,
     .btn-delete-room {
-        padding: 0.25rem 1rem;
-        font-size: 0.75rem;
-        font-weight: 500;
-        border-radius: 0.25rem;
-        border: 1px solid transparent;
-        background-color: #ffffff;
-        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .35rem;
+        min-width: 76px;
+        padding: .32rem .65rem;
+        border-radius: 8px;
+        font-size: .82rem;
+        font-weight: 700;
         text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        line-height: 1.2;
     }
 
     .btn-edit-room {
-        color: #ffffffff;
-        background-color: #3b82f6;
+        background-color: #F3F4F6;
+        color: #374151;
+        border: 1px solid #D1D5DB;
     }
 
     .btn-edit-room:hover {
-        background-color: #5c9bffff;
+        background-color: #E5E7EB;
     }
 
     .btn-delete-room {
-        color: #ffffffff;
-        background-color: #dc2626;
+        background-color: #FCE7E7;
+        color: #7F1D1D;
+        border: 1px solid #F5C2C7;
     }
 
     .btn-delete-room:hover {
-        background-color: #e05959ff;
+        background-color: #F8D7DA;
     }
 
     @media (max-width: 640px) {
@@ -322,12 +330,14 @@
                 </div>
 
                 <div class="room-actions">
-
                     <a href="{{ route('admin_edit_room', $room->room_id) }}" class="btn-edit-room">
-                        แก้ไข
+                        <i class="bi bi-pencil-square"></i> แก้ไข
                     </a>
 
-                    <form action="{{ route('admin_delete_room', $room->room_id) }}" method="POST">
+                    <form class="delete-form"
+                        action="{{ route('admin_delete_room', $room->room_id) }}"
+                        method="POST"
+                        style="display:inline;">
                         @csrf
                         @method('DELETE')
 
@@ -335,7 +345,7 @@
                         <button type="button"
                             class="btn-delete-room"
                             onclick="openDeletePopup(this, '{{ $room->room_name }}')">
-                            ลบ
+                            <i class="bi bi-trash3"></i>ลบ
                         </button>
                     </form>
 

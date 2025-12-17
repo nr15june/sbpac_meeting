@@ -1,10 +1,9 @@
 @extends('admin.layout')
 
-@section('title', 'เพิ่มพนักงาน | ศอ.บต.')
+@section('title', 'แก้ไขข้อมูลพนักงาน | ศอ.บต.')
 
 @section('content')
 
-{{-- ============ CSS เฉพาะหน้านี้ ============ --}}
 <style>
     .create-emp-wrapper {
         max-width: 1100px;
@@ -61,6 +60,7 @@
         font-weight: 600;
         text-decoration: none;
         cursor: pointer;
+        white-space: nowrap;
     }
 
     .btn-back:hover {
@@ -100,8 +100,7 @@
         font-weight: 600;
     }
 
-    .form-input,
-    .form-select {
+    .form-input {
         width: 100%;
         border-radius: 0.375rem;
         border: 1px solid #d1d5db;
@@ -111,8 +110,7 @@
         background-color: #ffffff;
     }
 
-    .form-input:focus,
-    .form-select:focus {
+    .form-input:focus {
         border-color: #9ca3af;
         box-shadow: 0 0 0 1px #9ca3af33;
     }
@@ -166,6 +164,7 @@
         cursor: pointer;
         border: none;
         color: #111827;
+        font-weight: 700;
     }
 
     .btn-cancel:hover {
@@ -180,7 +179,7 @@
         cursor: pointer;
         border: none;
         color: #111827;
-        font-weight: 700;
+        font-weight: 800;
     }
 
     .btn-confirm:hover {
@@ -191,7 +190,7 @@
         position: fixed;
         inset: 0;
         background: rgba(0, 0, 0, 0.45);
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         z-index: 9999;
@@ -225,33 +224,25 @@
 
     .popup-text {
         font-size: 1rem;
-        font-weight: 500;
+        font-weight: 600;
         color: #111827;
     }
 
     @keyframes popupShow {
-        from {
-            transform: scale(0.85);
-            opacity: 0;
-        }
-
-        to {
-            transform: scale(1);
-            opacity: 1;
-        }
+        from { transform: scale(0.85); opacity: 0; }
+        to   { transform: scale(1); opacity: 1; }
     }
 </style>
 
-{{-- ============ เนื้อหา ============ --}}
 <div class="create-emp-wrapper">
 
-    {{-- แถบหัวข้อ + ปุ่มย้อนกลับ --}}
+    {{-- Header --}}
     <div class="create-emp-header">
         <div class="create-emp-header-left">
             <div class="create-emp-icon">
-                <i class="bi bi-person-plus" style="font-size: 1.25rem; color: #374151;"></i>
+                <i class="bi bi-person-gear" style="font-size: 1.25rem; color: #374151;"></i>
             </div>
-            <h1 class="create-emp-title">เพิ่มพนักงาน</h1>
+            <h1 class="create-emp-title">แก้ไขข้อมูลพนักงาน</h1>
         </div>
 
         <a href="{{ route('admin_employees') }}" class="btn-back">
@@ -266,30 +257,24 @@
 
         <div class="create-emp-card-body">
 
-            {{-- ฟอร์มเพิ่มพนักงาน --}}
-            <form id="create-emp-form" action="{{ route('admin_store_employees') }}" method="POST">
+            {{-- ฟอร์มแก้ไข --}}
+            <form id="edit-emp-form" action="{{ route('admin_update.employees', $employee->id) }}" method="POST">
                 @csrf
+                @method('PUT')
 
-                {{-- ✅ แสดงกลุ่มงาน (ดึงจาก DB) แต่แก้ไม่ได้ --}}
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">กลุ่มงาน</label>
-                        <input type="text"
-                            class="form-input"
-                            value="{{ $departmentName ?? '-' }}"
-                            readonly>
-
-                        {{-- ส่ง id ไปด้วย (ถ้าต้องการรับใน controller) --}}
-                        <input type="hidden" name="department_id" value="{{ $departmentId ?? '' }}">
-
-                        @error('department_id') <div class="error-msg">{{ $message }}</div> @enderror
+                        <input type="text" class="form-input"
+                               value="{{ optional($employee->department)->name ?? ($departmentName ?? '-') }}"
+                               readonly>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">เลขบัตรประชาชน</label>
                         <input type="text" name="citizen_id" maxlength="13"
-                            class="form-input" placeholder="13 หลัก"
-                            value="{{ old('citizen_id') }}">
+                               class="form-input" placeholder="13 หลัก"
+                               value="{{ old('citizen_id', $employee->citizen_id) }}">
                         @error('citizen_id') <div class="error-msg">{{ $message }}</div> @enderror
                     </div>
                 </div>
@@ -298,16 +283,16 @@
                     <div class="form-group">
                         <label class="form-label">ชื่อ</label>
                         <input type="text" name="first_name"
-                            class="form-input" placeholder="ชื่อ"
-                            value="{{ old('first_name') }}">
+                               class="form-input" placeholder="ชื่อ"
+                               value="{{ old('first_name', $employee->first_name) }}">
                         @error('first_name') <div class="error-msg">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">นามสกุล</label>
                         <input type="text" name="last_name"
-                            class="form-input" placeholder="นามสกุล"
-                            value="{{ old('last_name') }}">
+                               class="form-input" placeholder="นามสกุล"
+                               value="{{ old('last_name', $employee->last_name) }}">
                         @error('last_name') <div class="error-msg">{{ $message }}</div> @enderror
                     </div>
                 </div>
@@ -316,80 +301,82 @@
                     <div class="form-group">
                         <label class="form-label">เบอร์โทร</label>
                         <input type="text" name="phone"
-                            class="form-input" placeholder="เช่น 08xxxxxxxx"
-                            value="{{ old('phone') }}">
+                               class="form-input" placeholder="เช่น 08xxxxxxxx"
+                               value="{{ old('phone', $employee->phone) }}">
                         @error('phone') <div class="error-msg">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">อีเมล</label>
                         <input type="text" name="email"
-                            class="form-input" placeholder="อีเมล"
-                            value="{{ old('email') }}">
+                               class="form-input" placeholder="อีเมล"
+                               value="{{ old('email', $employee->email) }}">
                         @error('email') <div class="error-msg">{{ $message }}</div> @enderror
                     </div>
                 </div>
 
+                {{-- ถ้าจะ “เปลี่ยนรหัสผ่าน” ค่อยกรอก (ไม่กรอก = ไม่เปลี่ยน) --}}
                 <div class="form-row">
-                    <div class="form-group
-                    <div class=" form-group">
-                        <label class="form-label">รหัสผ่าน</label>
+                    <div class="form-group">
+                        <label class="form-label">รหัสผ่านใหม่ (ถ้าต้องการเปลี่ยน)</label>
                         <input type="password" name="password"
-                            class="form-input" placeholder="รหัสผ่าน"
-                            value="{{ old('password') }}">
+                               class="form-input" placeholder="เว้นว่างถ้าไม่เปลี่ยน">
                         @error('password') <div class="error-msg">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">ยืนยันรหัสผ่าน</label>
-                        <input type="password" name="password_confirmation" class="form-input" placeholder="ยืนยันรหัสผ่าน">
+                        <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
+                        <input type="password" name="password_confirmation"
+                               class="form-input" placeholder="ยืนยันรหัสผ่านใหม่">
                     </div>
                 </div>
 
-                {{-- ปุ่มบันทึก --}}
                 <div class="btn-submit-wrapper">
-                    <button type="button" onclick="openConfirmPopup()" class="btn-submit">
+                    <button type="button" class="btn-submit" onclick="openConfirmPopup()">
                         บันทึก
                     </button>
                 </div>
+
             </form>
 
         </div>
     </div>
 
-    {{-- ===== Popup Confirm ===== --}}
-    <div id="confirmPopup" class="popup-overlay" style="display: none;">
+    {{-- Popup Confirm --}}
+    <div id="confirmPopup" class="popup-overlay">
         <div class="popup-box">
             <div class="popup-icon-circle">
                 <i class="bi bi-question-lg"></i>
             </div>
 
             <div class="popup-text" style="margin-bottom: 1.2rem;">
-                ต้องการบันทึกข้อมูลพนักงานหรือไม่?
+                ต้องการบันทึกการแก้ไขข้อมูลพนักงานหรือไม่?
             </div>
 
             <div style="display:flex; gap:1rem; justify-content:center;">
-                <button class="btn-cancel" onclick="closeConfirmPopup()">ยกเลิก</button>
-                <button class="btn-confirm" onclick="submitForm()">ตกลง</button>
+                <button class="btn-cancel" type="button" onclick="closeConfirmPopup()">ยกเลิก</button>
+                <button class="btn-confirm" type="button" onclick="submitForm()">ตกลง</button>
             </div>
         </div>
     </div>
 
 </div>
 
-{{-- ============ JS ============ --}}
 <script>
     function openConfirmPopup() {
         document.getElementById('confirmPopup').style.display = 'flex';
     }
-
     function closeConfirmPopup() {
         document.getElementById('confirmPopup').style.display = 'none';
     }
-
     function submitForm() {
-        document.getElementById('create-emp-form').submit();
+        document.getElementById('edit-emp-form').submit();
     }
+
+    // ปิด popup เมื่อคลิกพื้นหลังดำ
+    document.getElementById('confirmPopup').addEventListener('click', function(e){
+        if (e.target === this) closeConfirmPopup();
+    });
 </script>
 
 @endsection

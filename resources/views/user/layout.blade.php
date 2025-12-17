@@ -46,7 +46,7 @@
     <!-- Main Layout -->
     <div class="w-full h-[calc(100vh-64px)] bg-white">
         <div class="flex h-full">
-
+            
             <!-- ===== Sidebar ===== -->
             <aside class="w-64 bg-[#4C4C4C] text-gray-100 flex flex-col">
 
@@ -78,7 +78,7 @@
                     </a>
 
                     <!-- ประวัติการจอง -->
-                    <a href="{{ route('user_history_booking') }}"
+                    <a href="{{ auth()->check() ? route('user_history_booking') : route('user.login') }}"
                         class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-clock-history mr-2 text-white"></i>
                         <span>ประวัติการจอง</span>

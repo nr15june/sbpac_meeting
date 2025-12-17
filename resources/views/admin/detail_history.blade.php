@@ -258,10 +258,10 @@
 
         {{-- ปุ่มล่างขวา --}}
         <div class="detail-actions">
-            {{-- ปุ่มแก้ไข --}}
+            <!-- {{-- ปุ่มแก้ไข --}}
             <a href="{{ route('admin_edit_booking', $booking->booking_id) }}" class="btn-edit">
                 แก้ไข
-            </a>
+            </a> -->
 
             {{-- ฟอร์มลบการจอง --}}
             <form action="{{ route('admin_delete_booking', $booking->booking_id) }}"

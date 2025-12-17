@@ -76,7 +76,7 @@
 
     .room-card-footer {
         padding: 0.75rem;
-        background-color: #D6D6D6;
+        background-color: #e7e6e6ff;
         border-top: 1px solid #d4d4d4;
     }
 

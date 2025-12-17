@@ -12,8 +12,13 @@ class Admin extends Model
         'email',
         'password',
         'role',
+        'department_id', 
     ];
 
     protected $hidden = ['password'];
-}
 
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+}

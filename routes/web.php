@@ -85,8 +85,8 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.
 
 
 //-------หน้าปฏิทินการใช้ห้อง-------//
-Route::get('/admin/calendar', [CalendarController::class, 'adminIndex'])->name('admin_calendar');
-Route::get('/admin/calendar/day/{date}', [CalendarController::class, 'adminDay'])->name('admin_calendar_day');
+Route::get('/admin/calendar/calendar', [CalendarController::class, 'adminIndex'])->name('admin_calendar');
+Route::get('/admin/calendar/calendar/day/{date}', [CalendarController::class, 'adminDay'])->name('admin_calendar_day');
 
 //-------หน้าจัดการพนักงาน-------//
 Route::get('/admin/employees', [AdminEmployeeController::class, 'index'])
@@ -97,6 +97,15 @@ Route::get('/admin/employees/create', [AdminEmployeeController::class, 'create']
 
 Route::post('/admin/employees', [AdminEmployeeController::class, 'store'])
     ->name('admin_store_employees');
+//-------แก้ไข/ลบ พนักงาน-------//
+Route::get('/admin/employees/{id}/edit', [AdminEmployeeController::class, 'edit'])
+    ->name('admin_edit.employees');
+
+Route::put('/admin/employees/{id}', [AdminEmployeeController::class, 'update'])
+    ->name('admin_update.employees');
+
+Route::delete('/admin/employees/{id}', [AdminEmployeeController::class, 'destroy'])
+    ->name('admin_delete.employees');
 
 //-------หน้า ห้องประชุม-------//
 Route::post('/admin/rooms/store', [AdminRoomController::class, 'store'])
