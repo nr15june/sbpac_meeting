@@ -9,13 +9,12 @@
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
-    <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
     @endif
 
     <style>
@@ -46,7 +45,7 @@
     <!-- Main Layout -->
     <div class="w-full h-[calc(100vh-64px)] bg-white">
         <div class="flex h-full">
-            
+
             <!-- ===== Sidebar ===== -->
             <aside class="w-64 bg-[#4C4C4C] text-gray-100 flex flex-col">
 
@@ -70,56 +69,74 @@
                 </div>
 
                 <nav class="text-sm">
-                    <!-- จองห้องประชุม (ถ้าไม่ login -> ไปหน้า user.login) -->
-                    <a href="{{ auth()->check() ? route('user_rooms') : route('user.login') }}"
+                    <!-- จองห้องประชุม -->
+                    <a href="{{ session('user_logged_in') ? route('user_rooms') : route('user.login') }}"
                         class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-calendar2-event mr-2 text-white"></i>
                         <span>จองห้องประชุม</span>
                     </a>
 
                     <!-- ประวัติการจอง -->
-                    <a href="{{ auth()->check() ? route('user_history_booking') : route('user.login') }}"
+                    <a href="{{ session('user_logged_in') ? route('user_history_booking') : route('user.login') }}"
                         class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-clock-history mr-2 text-white"></i>
                         <span>ประวัติการจอง</span>
                     </a>
                 </nav>
 
-                <!-- บุคคล -->
+                {{-- ================== ผู้ใช้งาน ================== --}}
+                @if(session('user_logged_in'))
+                <div class="bg-[#676767] px-4 py-2.5 text-xs tracking-wide text-gray-300 border-b border-gray-500 mt-1">
+                    ผู้ใช้งาน
+                </div>
+
+                <div class="px-4 py-3 border-b border-gray-600">
+                    <div class="flex items-start gap-2">
+                        <i class="bi bi-person-circle text-white text-lg mt-0.5"></i>
+
+                        <div class="leading-tight">
+                            <div class="text-[15px] font-semibold text-white leading-snug">
+                                {{ session('user_name') }}
+                            </div>
+
+                            <div class="text-xs text-gray-300 mt-0.5">
+                                {{ session('department_name') ?? 'กลุ่มงาน' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                {{-- ================== สำหรับเจ้าหน้าที่ (แสดงเฉพาะตอนยังไม่ login) ================== --}}
+                @if(!session('user_logged_in'))
                 <div class="bg-[#676767] px-4 py-2.5 text-xs tracking-wide text-gray-300 border-b border-gray-500 mt-1">
                     บุคคล
                 </div>
 
                 <nav class="text-sm">
-                    {{-- สำหรับเจ้าหน้าที่ (โชว์ตอน user ยังไม่ login จะได้ไม่สับสน) --}}
-                    @guest
                     <a href="{{ route('login') }}"
                         class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-person-circle mr-2 text-white"></i>
                         <span>สำหรับเจ้าหน้าที่</span>
                     </a>
-                    @endguest
                 </nav>
+                @endif
 
-                {{-- ===== ส่วนล่างสุดของ Sidebar: Login/Logout ===== --}}
-                <div class="mt-auto border-t border-gray-600">
-
-                    @auth
-                    <form action="{{ route('user.logout') }}" method="POST" class="p-3">
+                {{-- ================== Logout (ล่างสุด) ================== --}}
+                @if(session('user_logged_in'))
+                <div class="mt-auto border-t border-gray-600 p-1">
+                    <form action="{{ route('user.logout') }}" method="POST">
                         @csrf
                         <button type="submit"
-                            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded
-                       bg-red-600 hover:bg-red-700 text-white text-sm">
-                            <i class="bi bi-box-arrow-right"></i>
-                            ออกจากระบบ
+                            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 
+                            rounded bg-yellow hover:bg-yellow-400 text-white text-sm">
+                            <i class="bi bi-box-arrow-right"></i> ออกจากระบบ
                         </button>
                     </form>
-                    @endauth
-
-                </div>
-
+                </div> @endif
 
             </aside>
+
 
             {{-- ================== พื้นที่แสดงเนื้อหาแต่ละหน้า ================== --}}
             <main class="flex-1 bg-[#FFFFFF] p-6 overflow-y-auto">

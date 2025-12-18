@@ -46,7 +46,6 @@
         font-size: 1.2rem;
         font-weight: 600;
         color: #1f2933;
-        /* เทาเข้ม */
     }
 
     .btn-back:hover {

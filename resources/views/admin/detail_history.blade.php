@@ -14,6 +14,7 @@
     .detail-header {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         margin-bottom: 1.5rem;
         padding: 1rem 1.5rem;
         background-color: #ffffff;
@@ -43,6 +44,26 @@
         font-size: 1.2rem;
         font-weight: 600;
         color: #1f2933;
+    }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: 0.45rem 1.1rem;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        background: #fff;
+        color: #111827;
+        font-size: .875rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .btn-back:hover {
+        background-color: #f3f4f6;
     }
 
     /* กล่องข้อมูล */
@@ -206,82 +227,85 @@
     <div class="detail-header">
         <div class="detail-header-left">
             <div class="detail-icon">
-                <i class="bi bi-clock-history"></i>
+                <i class="bi bi-clock-history" style="font-size: 1.25rem; color: #374151;"></i>
             </div>
-            <div class="detail-title">รายละเอียดประวัติการจอง</div>
+            <h1 class="detail-title">รายละเอียดประวัติการจอง</h1>
         </div>
+        <a href="{{ route('admin_meetingrooms') }}" class="btn-back">
+            <i class="bi bi-arrow-left"></i> ย้อนกลับ
+        </a>
     </div>
 
-    {{-- กล่องรายละเอียด --}}
-    <div class="detail-box">
+{{-- กล่องรายละเอียด --}}
+<div class="detail-box">
 
-        <table class="detail-table">
-            <tr>
-                <td class="label-cell">ชื่อ - สกุล :</td>
-                <td class="value-cell">{{ $booking->name }} {{ $booking->lastname }}</td>
-            </tr>
+    <table class="detail-table">
+        <tr>
+            <td class="label-cell">ชื่อ - สกุล :</td>
+            <td class="value-cell">{{ $booking->name }} {{ $booking->lastname }}</td>
+        </tr>
 
-            <tr>
-                <td class="label-cell">เบอร์โทรศัพท์ :</td>
-                <td class="value-cell">{{ $booking->phone }}</td>
-            </tr>
+        <tr>
+            <td class="label-cell">เบอร์โทรศัพท์ :</td>
+            <td class="value-cell">{{ $booking->phone }}</td>
+        </tr>
 
-            <tr>
-                <td class="label-cell">วันที่ใช้ห้อง :</td>
-                <td class="value-cell">
-                    {{ $booking->start_time ? $booking->start_time->format('d/m/Y') : '-' }}
-                </td>
-            </tr>
+        <tr>
+            <td class="label-cell">วันที่ใช้ห้อง :</td>
+            <td class="value-cell">
+                {{ $booking->start_time ? $booking->start_time->format('d/m/Y') : '-' }}
+            </td>
+        </tr>
 
-            <tr>
-                <td class="label-cell">เวลา :</td>
-                <td class="value-cell">
-                    {{ $booking->start_time->format('H.i') }} - {{ $booking->end_time->format('H.i') }} น.
-                </td>
-            </tr>
+        <tr>
+            <td class="label-cell">เวลา :</td>
+            <td class="value-cell">
+                {{ $booking->start_time->format('H.i') }} - {{ $booking->end_time->format('H.i') }} น.
+            </td>
+        </tr>
 
-            <tr>
-                <td class="label-cell">ห้องที่ใช้ :</td>
-                <td class="value-cell">{{ optional($booking->room)->room_name ?? '-' }}</td>
-            </tr>
+        <tr>
+            <td class="label-cell">ห้องที่ใช้ :</td>
+            <td class="value-cell">{{ optional($booking->room)->room_name ?? '-' }}</td>
+        </tr>
 
-            <tr>
-                <td class="label-cell">หัวข้อการประชุม :</td>
-                <td class="value-cell">{{ $booking->meeting_topic }}</td>
-            </tr>
+        <tr>
+            <td class="label-cell">หัวข้อการประชุม :</td>
+            <td class="value-cell">{{ $booking->meeting_topic }}</td>
+        </tr>
 
-            <tr>
-                <td class="label-cell">กลุ่มงาน :</td>
-                <td class="value-cell">{{ $booking->department }}</td>
-            </tr>
-        </table>
+        <tr>
+            <td class="label-cell">กลุ่มงาน :</td>
+            <td class="value-cell">{{ $booking->department }}</td>
+        </tr>
+    </table>
 
-        {{-- ปุ่มล่างขวา --}}
-        <div class="detail-actions">
-            <!-- {{-- ปุ่มแก้ไข --}}
+    {{-- ปุ่มล่างขวา --}}
+    <div class="detail-actions">
+        <!-- {{-- ปุ่มแก้ไข --}}
             <a href="{{ route('admin_edit_booking', $booking->booking_id) }}" class="btn-edit">
                 แก้ไข
             </a> -->
 
-            {{-- ฟอร์มลบการจอง --}}
-            <form action="{{ route('admin_delete_booking', $booking->booking_id) }}"
-                method="POST"
-                class="inline-form">
-                @csrf
-                @method('DELETE')
+        {{-- ฟอร์มลบการจอง --}}
+        <form action="{{ route('admin_delete_booking', $booking->booking_id) }}"
+            method="POST"
+            class="inline-form">
+            @csrf
+            @method('DELETE')
 
-                <button type="button"
-                    class="btn-delete"
-                    data-room-name="{{ optional($booking->room)->room_name ?? 'การจองห้องประชุม' }}"
-                    onclick="openDeletePopup(this, this.dataset.roomName)">
-                    ลบ
-                </button>
+            <button type="button"
+                class="btn-delete"
+                data-room-name="{{ optional($booking->room)->room_name ?? 'การจองห้องประชุม' }}"
+                onclick="openDeletePopup(this, this.dataset.roomName)">
+                ลบ
+            </button>
 
 
-            </form>
-        </div>
-
+        </form>
     </div>
+
+</div>
 
 </div>
 

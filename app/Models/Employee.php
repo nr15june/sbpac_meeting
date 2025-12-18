@@ -20,4 +20,10 @@ class Employee extends Model
     {
         return $this->belongsTo(Department::class);
     }
+
+    // (เสริม) ถ้าจะใช้ในอนาคต
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'employee_id');
+    }
 }

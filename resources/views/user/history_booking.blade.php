@@ -162,15 +162,6 @@
             </div>
             <div class="history-title">ประวัติการจอง</div>
         </div>
-
-        {{-- ฟอร์มค้นหา --}}
-        <form action="{{ route('user_history_booking') }}" method="GET" class="history-search">
-            <i class="bi bi-search"></i>
-            <input type="text"
-                name="q"
-                value="{{ $q ?? '' }}"
-                placeholder="ค้นหาด้วยชื่อผู้จอง ">
-        </form>
     </div>
 
 
@@ -201,8 +192,7 @@
                     {{-- เวลา --}}
                     <td>
                         @if($booking->start_time && $booking->end_time)
-                        {{ $booking->start_time->format('H.i') }}
-                        - {{ $booking->end_time->format('H.i') }} น.
+                        {{ $booking->start_time->format('H.i') }} - {{ $booking->end_time->format('H.i') }} น.
                         @else
                         -
                         @endif

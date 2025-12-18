@@ -44,7 +44,27 @@
     .create-room-title {
         font-size: 1.2rem;
         font-weight: 600;
-        color: #1f2933; 
+        color: #1f2933;
+    }
+
+    .btn-back:hover {
+        background-color: #f3f4f6;
+    }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: 0.45rem 1.1rem;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        background: #fff;
+        color: #111827;
+        font-size: .875rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        white-space: nowrap;
     }
 
     .btn-back:hover {
@@ -148,6 +168,7 @@
         font-size: 0.9rem;
         cursor: pointer;
     }
+
     .btn-cancel:hover {
         background: #a8a8a8ff;
     }
@@ -160,6 +181,7 @@
         cursor: pointer;
         border: none;
     }
+
     .btn-confirm:hover {
         background: #6CB94C;
     }
@@ -167,7 +189,7 @@
     .popup-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.45);
+        background: rgba(0, 0, 0, 0.45);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -207,8 +229,15 @@
     }
 
     @keyframes popupShow {
-        from { transform: scale(0.85); opacity: 0; }
-        to   { transform: scale(1);    opacity: 1; }
+        from {
+            transform: scale(0.85);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
     }
 </style>
 
@@ -223,6 +252,9 @@
             </div>
             <h1 class="create-room-title">แก้ไขห้องประชุม</h1>
         </div>
+        <a href="{{ route('admin_employees') }}" class="btn-back">
+            <i class="bi bi-arrow-left"></i> ย้อนกลับ
+        </a>
     </div>
 
     {{-- กล่องฟอร์ม --}}
@@ -235,10 +267,10 @@
 
         {{-- ฟอร์มแก้ไขห้อง --}}
         <form id="edit-room-form"
-              action="{{ route('rooms.update', $room->room_id) }}"
-              method="POST"
-              enctype="multipart/form-data"
-              class="create-room-card-body">
+            action="{{ route('rooms.update', $room->room_id) }}"
+            method="POST"
+            enctype="multipart/form-data"
+            class="create-room-card-body">
             @csrf
             @method('PUT')
 
@@ -246,9 +278,9 @@
             <div class="form-group">
                 <label class="form-label">ชื่อห้องประชุม</label>
                 <input type="text" name="room_name"
-                       class="form-input"
-                       value="{{ old('room_name', $room->room_name) }}"
-                       placeholder="ระบุชื่อห้องประชุม">
+                    class="form-input"
+                    value="{{ old('room_name', $room->room_name) }}"
+                    placeholder="ระบุชื่อห้องประชุม">
             </div>
 
             {{-- อาคาร + จำนวนคน/ห้อง --}}
@@ -256,17 +288,17 @@
                 <div class="form-group">
                     <label class="form-label">อาคาร</label>
                     <input type="text" name="building"
-                           class="form-input"
-                           value="{{ old('building', $room->building) }}"
-                           placeholder="อาคาร / ชั้น">
+                        class="form-input"
+                        value="{{ old('building', $room->building) }}"
+                        placeholder="อาคาร / ชั้น">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">จำนวนคน/ห้อง</label>
                     <input type="number" name="capacity" min="1"
-                           class="form-input"
-                           value="{{ old('capacity', $room->capacity) }}"
-                           placeholder="เช่น 10">
+                        class="form-input"
+                        value="{{ old('capacity', $room->capacity) }}"
+                        placeholder="เช่น 10">
                 </div>
             </div>
 
@@ -274,31 +306,31 @@
             <div class="form-group">
                 <label class="form-label">รายละเอียด</label>
                 <textarea name="description"
-                          class="form-textarea"
-                          placeholder="เช่น มีโปรเจคเตอร์ ไมโครโฟน ไวท์บอร์ด ฯลฯ">{{ old('description', $room->description) }}</textarea>
+                    class="form-textarea"
+                    placeholder="เช่น มีโปรเจคเตอร์ ไมโครโฟน ไวท์บอร์ด ฯลฯ">{{ old('description', $room->description) }}</textarea>
             </div>
 
             {{-- อัปโหลดรูปภาพ --}}
             <div class="form-group">
                 <label class="form-label">รูปภาพ (ถ้าไม่เลือกใหม่ จะใช้รูปเดิม)</label>
                 <input type="file" name="room_image"
-                       class="form-file">
+                    class="form-file">
 
                 @if($room->room_image)
-                    <div style="margin-top: 0.5rem;">
-                        <span style="font-size: 0.8rem; color:#6b7280;">รูปปัจจุบัน:</span><br>
-                        <img src="{{ asset('storage/'.$room->room_image) }}"
-                             alt="{{ $room->room_name }}"
-                             style="width: 160px; border-radius: 0.375rem; margin-top:0.25rem;">
-                    </div>
+                <div style="margin-top: 0.5rem;">
+                    <span style="font-size: 0.8rem; color:#6b7280;">รูปปัจจุบัน:</span><br>
+                    <img src="{{ asset('storage/'.$room->room_image) }}"
+                        alt="{{ $room->room_name }}"
+                        style="width: 160px; border-radius: 0.375rem; margin-top:0.25rem;">
+                </div>
                 @endif
             </div>
 
             {{-- ปุ่มบันทึก --}}
             <div class="btn-submit-wrapper">
                 <button type="button"
-                        onclick="openConfirmPopup()"
-                        class="btn-submit">
+                    onclick="openConfirmPopup()"
+                    class="btn-submit">
                     บันทึกการแก้ไข
                 </button>
             </div>

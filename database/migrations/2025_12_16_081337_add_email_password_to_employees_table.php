@@ -9,8 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->string('email')->unique()->after('citizen_id');
-            $table->string('password')->after('email');
+            if (!Schema::hasColumn('employees', 'password')) {
+                $table->string('password')->after('email');
+            }
         });
     }
 

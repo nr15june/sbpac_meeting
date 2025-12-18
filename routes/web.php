@@ -8,7 +8,7 @@ use App\Models\Room;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\UserAuthController;     
+use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\AdminEmployeeController;
 
 //-------หน้าแรก-------//
@@ -23,18 +23,16 @@ Route::get('/user/calendar', [CalendarController::class, 'userIndex'])->name('us
 Route::get('/user/calendar/day/{date}', [CalendarController::class, 'userDay'])->name('user_calendar_day');
 
 //-------หน้า login ผู้ใช้งาน-------//
-Route::get('/user/login', function () {
-    return view('auth.user_login'); 
-})->name('user.login');
-
-//-------login ผู้ใช้งาน-------//
+Route::get('/user/login', [UserAuthController::class, 'showLogin'])->name('user.login');
 Route::post('/user/login', [UserAuthController::class, 'login'])->name('user.login.submit');
-
-//-------logout ผู้ใช้งาน-------//
 Route::post('/user/logout', [UserAuthController::class, 'logout'])->name('user.logout');
 
 //-------หน้าจองห้อง-------//
 Route::get('/user/room', function () {
+    if (!session('user_logged_in')) {
+        session(['url.intended' => url()->current()]);
+        return redirect()->route('user.login');
+    }
     $rooms = Room::all();
     return view('user.room', compact('rooms'));
 })->name('user_rooms');
@@ -47,9 +45,15 @@ Route::post('/booking/store', [BookingController::class, 'store'])
 
 //-------หน้าประวัติการจอง-------//
 Route::get('/user/history_booking', function (Request $request) {
-    $q = $request->input('q');  // ค่าที่พิมพ์ในช่องค้นหา
+    if (!session('user_logged_in')) {
+        session(['url.intended' => url()->current()]);
+        return redirect()->route('user.login');
+    }
+
+    $q = $request->input('q');
 
     $bookings = Booking::with('room')
+        ->where('employee_id', session('employee_id'))
         ->when($q, function ($query) use ($q) {
             $query->where(function ($sub) use ($q) {
                 $sub->where('name', 'like', "%{$q}%")
@@ -60,18 +64,37 @@ Route::get('/user/history_booking', function (Request $request) {
         ->orderBy('start_time', 'desc')
         ->get();
 
-    return view('user.history_booking', [
-        'bookings' => $bookings,
-        'q'        => $q,
-    ]);
+    return view('user.history_booking', compact('bookings', 'q'));
 })->name('user_history_booking');
 
 //-------หน้ารายละเอียดการจอง-------//
 Route::get('/user/history_booking/detail/{id}', function ($id) {
-    $booking = Booking::with('room')->findOrFail($id);  // ตอนนี้จะ where booking_id = $id ให้เอง
+    if (!session('user_logged_in')) {
+        session(['url.intended' => url()->current()]);
+        return redirect()->route('user.login');
+    }
+
+    $booking = Booking::with(['room', 'employee'])
+        ->where('booking_id', $id)
+        ->where('employee_id', session('employee_id'))
+        ->firstOrFail();
 
     return view('user.detail_history', compact('booking'));
 })->name('user_history_detail');
+
+// ------- แก้ไขการจอง (ผู้ใช้) ------- //
+Route::get('/user/booking/{id}/edit', [BookingController::class, 'userEdit'])
+    ->name('user_edit_booking');
+
+// ------- บันทึกแก้ไข (ผู้ใช้) ------- //
+Route::put('/user/booking/{id}', [BookingController::class, 'userUpdate'])
+    ->name('user_update_booking');
+
+// ------- ลบการจอง (ผู้ใช้) ------- //
+Route::delete('/user/booking/{id}', [BookingController::class, 'userDestroy'])
+    ->name('user_delete_booking');
+
+
 //---------------------------------admin---------------------------------------//
 
 //-------หน้าสำหรับเจ้าหน้าที่-------//

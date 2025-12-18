@@ -106,7 +106,7 @@
                 </nav>
 
                 <!-- Logout -->
-                <div class="mt-auto border-t border-gray-600 p-3">
+                <div class="mt-auto border-t border-gray-600 p-1">
                     <form action="{{ route('admin.logout') }}" method="POST">
                         @csrf
                         <button type="submit"

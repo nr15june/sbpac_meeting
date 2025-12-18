@@ -4,10 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Employee;
+use App\Models\Department;
 use Illuminate\Support\Facades\Hash;
 
 class UserAuthController extends Controller
 {
+    public function showLogin()
+    {
+        return view('auth.user_login');
+    }
+
     public function login(Request $request)
     {
         $request->validate([
@@ -23,24 +29,41 @@ class UserAuthController extends Controller
             return back()->with('error', 'อีเมลหรือรหัสผ่านไม่ถูกต้อง')->withInput();
         }
 
+        $department = Department::find($employee->department_id);
+
         session([
-            'user_logged_in' => true,
-            'user_id'        => $employee->id,
-            'user_name'      => $employee->first_name . ' ' . $employee->last_name,
-            'department_id'  => $employee->department_id,
+            'user_logged_in'   => true,
+
+            // ✅ สำคัญ: ใช้ employee_id ผูก booking
+            'employee_id'      => $employee->id,
+
+            // ✅ ข้อมูลผู้ใช้ (ไว้โชว์/ล็อกในฟอร์ม)
+            'user_name'        => $employee->first_name . ' ' . $employee->last_name,
+            'first_name'       => $employee->first_name,
+            'last_name'        => $employee->last_name,
+            'phone'            => $employee->phone,
+
+            'department_id'    => $employee->department_id,
+            'department_name'  => $department?->name,
         ]);
 
-        return redirect()->route('user_calendar');
+        $intended = session('url.intended', route('user_calendar'));
+        session()->forget('url.intended');
+
+        return redirect($intended);
     }
 
     public function logout(Request $request)
     {
-        // ล้าง session ของ user
         $request->session()->forget([
             'user_logged_in',
-            'user_id',
+            'employee_id',
             'user_name',
+            'first_name',
+            'last_name',
+            'phone',
             'department_id',
+            'department_name',
         ]);
 
         $request->session()->regenerate();
