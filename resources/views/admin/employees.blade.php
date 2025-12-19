@@ -92,11 +92,6 @@
         color: #9ca3af;
     }
 
-    .search-pill input:focus {
-        border-color: #38bdf8;
-        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
-    }
-
     .search-pill .search-icon {
         position: absolute;
         left: 0.85rem;
