@@ -64,6 +64,49 @@
         background-color: #f2c739;
     }
 
+    /* ===== Minimal Pill Search ===== */
+    .emp-search {
+        margin: 0.75rem 0 1.25rem;
+    }
+
+    .search-pill {
+        max-width: 380px;
+        position: relative;
+    }
+
+    .search-pill input {
+        width: 100%;
+        height: 42px;
+        padding: 0 1rem 0 2.6rem;
+        /* เว้นที่ไอคอน */
+        border-radius: 9999px;
+        border: 1px solid #d1d5db;
+        background: #ffffff;
+        font-size: 0.9rem;
+        color: #111827;
+        outline: none;
+        transition: border-color .15s ease, box-shadow .15s ease;
+    }
+
+    .search-pill input::placeholder {
+        color: #9ca3af;
+    }
+
+    .search-pill input:focus {
+        border-color: #38bdf8;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+    }
+
+    .search-pill .search-icon {
+        position: absolute;
+        left: 0.85rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        font-size: 1rem;
+        pointer-events: none;
+    }
+
     .emp-table-wrap {
         background: #fff;
         border-radius: .5rem;
@@ -257,6 +300,19 @@
         <a href="{{ route('admin_create_employees') }}" class="btn-add-emp">
             + เพิ่มพนักงาน
         </a>
+    </div>
+
+    {{-- ===== Search (Minimal) ===== --}}
+    <div class="emp-search">
+        <form method="GET" action="{{ route('admin_employees') }}">
+            <div class="search-pill">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text"
+                    name="q"
+                    value="{{ $q ?? '' }}"
+                    placeholder="ค้นหาด้วยชื่อผู้จอง">
+            </div>
+        </form>
     </div>
 
     <div class="emp-table-wrap">

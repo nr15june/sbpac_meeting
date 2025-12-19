@@ -265,6 +265,13 @@
                             name="start_time"
                             class="form-input @error('start_time') input-error @enderror"
                             value="{{ old('start_time') }}">
+
+                        @error('start_time')
+                        <div class="text-red-600 text-sm mt-1">
+                            {{ $message }}
+                        </div>
+                        @enderror
+
                     </div>
                     <div>
                         <label class="form-label">
@@ -274,6 +281,12 @@
                             name="end_time"
                             class="form-input @error('end_time') input-error @enderror"
                             value="{{ old('end_time') }}">
+
+                        @error('end_time')
+                        <div class="text-red-600 text-sm mt-1">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
                 </div>
 
@@ -398,7 +411,7 @@
 {{-- ยืนยันก่อนบันทึก --}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('bookingForm'); 
+        const form = document.getElementById('bookingForm');
         const banner = document.getElementById('client-error-banner');
         const popup = document.getElementById('confirmPopup');
 

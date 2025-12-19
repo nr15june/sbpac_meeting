@@ -11,20 +11,38 @@ use Illuminate\Support\Facades\Hash;
 class AdminEmployeeController extends Controller
 {
     public function index(Request $request)
-    {
-        if (!session('admin_logged_in')) {
-            return redirect()->route('admin.login');
-        }
-
-        $admin = Admin::findOrFail(session('admin_id'));
-
-        $employees = Employee::with(['department'])
-            ->where('department_id', $admin->department_id)
-            ->orderBy('first_name')
-            ->get();
-
-        return view('admin.employees', compact('employees'));
+{
+    if (!session('admin_logged_in')) {
+        return redirect()->route('admin.login');
     }
+
+    $admin = Admin::findOrFail(session('admin_id'));
+
+    // ✅ รับค่าค้นหา
+    $q = trim($request->get('q'));
+
+    $employees = Employee::with('department')
+        ->where('department_id', $admin->department_id)
+        ->when($q, function ($query) use ($q) {
+            $query->where(function ($sub) use ($q) {
+                $sub->where('citizen_id', 'like', "%{$q}%")
+                    ->orWhere('first_name', 'like', "%{$q}%")
+                    ->orWhere('last_name', 'like', "%{$q}%")
+                    ->orWhereRaw("CONCAT(first_name,' ',last_name) LIKE ?", ["%{$q}%"])
+                    ->orWhere('phone', 'like', "%{$q}%")
+                    ->orWhere('email', 'like', "%{$q}%")
+                    ->orWhereHas('department', function ($d) use ($q) {
+                        $d->where('name', 'like', "%{$q}%");
+                    });
+            });
+        })
+        ->orderBy('first_name')
+        ->get();
+
+    // ✅ ส่ง $q ไปให้ blade เพื่อให้ช่องค้นหาค้างค่าเดิม
+    return view('admin.employees', compact('employees', 'q'));
+}
+
 
     public function create()
     {

@@ -36,13 +36,16 @@ class BookingController extends Controller
             'phone'         => 'required|string|max:30',
         ]);
 
-        $start = Carbon::parse($request->use_date . ' ' . $request->start_time);
-        $end   = Carbon::parse($request->use_date . ' ' . $request->end_time);
+        $tz = 'Asia/Bangkok';
+
+        $start = Carbon::createFromFormat('Y-m-d H:i', $request->use_date . ' ' . $request->start_time, $tz);
+        $end   = Carbon::createFromFormat('Y-m-d H:i', $request->use_date . ' ' . $request->end_time, $tz);
+        $now   = Carbon::now($tz)->seconds(0);
 
         // ✅ ห้ามจองย้อนหลัง (รวมวันนี้แต่เวลาเริ่มผ่านมาแล้ว)
-        if ($start->lt(now())) {
+        if ($start->lte($now)) {
             return back()
-                ->withErrors(['use_date' => 'ไม่สามารถจองย้อนหลังได้ กรุณาเลือกวัน/เวลาใหม่'])
+                ->withErrors(['start_time' => 'ไม่สามารถจองย้อนหลังได้ กรุณาเลือกวัน/เวลาใหม่'])
                 ->withInput();
         }
 
@@ -53,7 +56,7 @@ class BookingController extends Controller
                 ->withInput();
         }
 
-        // ✅ กันเวลาชนกัน (ห้องเดียวกัน + ช่วงเวลาทับซ้อน)
+        // ✅ กันเวลาชนกัน
         $conflict = Booking::where('room_id', $request->room_id)
             ->where(function ($q) use ($start, $end) {
                 $q->where('start_time', '<', $end)
@@ -116,20 +119,28 @@ class BookingController extends Controller
             'phone'         => 'required|string|max:30',
         ]);
 
-        $start = Carbon::parse($request->use_date . ' ' . $request->start_time);
-        $end   = Carbon::parse($request->use_date . ' ' . $request->end_time);
+        $tz = config('app.timezone'); // Asia/Bangkok
 
-        if ($start->lt(now())) {
-            return back()->withErrors(['use_date' => 'ไม่สามารถแก้ไขเป็นเวลาย้อนหลังได้'])->withInput();
+        $start = Carbon::createFromFormat('Y-m-d H:i', $request->use_date . ' ' . $request->start_time, $tz);
+        $end   = Carbon::createFromFormat('Y-m-d H:i', $request->use_date . ' ' . $request->end_time, $tz);
+        $now   = now($tz);
+
+        // ✅ ห้ามจองย้อนหลัง (รวมวันนี้แต่เวลาเริ่มผ่านมาแล้ว)
+        if ($start->lte($now)) {
+            return back()
+                ->withErrors(['start_time' => 'ไม่สามารถจองย้อนหลังได้ กรุณาเลือกวัน/เวลาใหม่'])
+                ->withInput();
         }
 
+        // ✅ เวลาสิ้นสุดต้องมากกว่าเวลาเริ่ม
         if ($end->lte($start)) {
-            return back()->withErrors(['end_time' => 'เวลาสิ้นสุดต้องมากกว่าเวลาเริ่ม'])->withInput();
+            return back()
+                ->withErrors(['end_time' => 'เวลาสิ้นสุดต้องมากกว่าเวลาเริ่ม'])
+                ->withInput();
         }
 
-        // ✅ กันเวลาชน (ยกเว้นรายการนี้เอง)
-        $conflict = Booking::where('room_id', $booking->room_id)
-            ->where('booking_id', '!=', $booking->booking_id)
+        // ✅ กันเวลาชนกัน
+        $conflict = Booking::where('room_id', $request->room_id)
             ->where(function ($q) use ($start, $end) {
                 $q->where('start_time', '<', $end)
                     ->where('end_time', '>', $start);
@@ -137,7 +148,9 @@ class BookingController extends Controller
             ->exists();
 
         if ($conflict) {
-            return back()->withErrors(['start_time' => 'ช่วงเวลานี้มีคนจองแล้ว กรุณาเลือกเวลาใหม่'])->withInput();
+            return back()
+                ->withErrors(['start_time' => 'ช่วงเวลานี้มีคนจองแล้ว กรุณาเลือกเวลาใหม่'])
+                ->withInput();
         }
 
         $booking->update([
@@ -199,21 +212,24 @@ class BookingController extends Controller
             'email'         => 'required|email|max:255',
         ]);
 
-        $start = Carbon::parse($validated['use_date'] . ' ' . $validated['start_time']);
-        $end   = Carbon::parse($validated['use_date'] . ' ' . $validated['end_time']);
+        $tz = 'Asia/Bangkok';
 
-        // ✅ กันเวลาชนกันตอนแก้ไข (ยกเว้นรายการตัวเอง)
-        $conflict = Booking::where('room_id', $booking->room_id)
-            ->where('booking_id', '!=', $booking->booking_id)
-            ->where(function ($q) use ($start, $end) {
-                $q->where('start_time', '<', $end)
-                    ->where('end_time', '>', $start);
-            })
-            ->exists();
+        // ✅ ทำให้ timezone + seconds เหมือนกัน 100%
+        $start = Carbon::parse($request->use_date . ' ' . $request->start_time)->setTimezone($tz)->seconds(0);
+        $end   = Carbon::parse($request->use_date . ' ' . $request->end_time)->setTimezone($tz)->seconds(0);
+        $now   = Carbon::now($tz)->seconds(0);
 
-        if ($conflict) {
+        // ✅ ห้ามแก้ย้อนหลัง (รวมวันนี้เวลาเริ่มผ่านมาแล้ว)
+        if ($start->lessThanOrEqualTo($now)) {
             return back()
-                ->withErrors(['start_time' => 'ช่วงเวลานี้มีคนจองแล้ว กรุณาเลือกเวลาใหม่'])
+                ->withErrors(['start_time' => 'ไม่สามารถเลือกเวลาในอดีตได้ กรุณาเลือกวัน/เวลาใหม่'])
+                ->withInput();
+        }
+
+        // ✅ เวลาสิ้นสุดต้องมากกว่าเวลาเริ่ม
+        if ($end->lessThanOrEqualTo($start)) {
+            return back()
+                ->withErrors(['end_time' => 'เวลาสิ้นสุดต้องมากกว่าเวลาเริ่ม'])
                 ->withInput();
         }
 

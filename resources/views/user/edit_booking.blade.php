@@ -250,6 +250,12 @@
                             name="start_time"
                             class="form-input @error('start_time') input-error @enderror"
                             value="{{ old('start_time', $start_time) }}">
+
+                        @error('start_time')
+                        <div class="text-red-600 text-sm mt-1">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
 
                     <div>
@@ -258,6 +264,12 @@
                             name="end_time"
                             class="form-input @error('end_time') input-error @enderror"
                             value="{{ old('end_time', $end_time) }}">
+
+                        @error('end_time')
+                        <div class="text-red-600 text-sm mt-1">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
                 </div>
 

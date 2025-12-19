@@ -1,7 +1,7 @@
 <?php
 
 return [
-    // 'timezone' => env('APP_TIMEZONE', 'Asia/Bangkok'),
+    'timezone' => env('APP_TIMEZONE', 'Asia/Bangkok'),
 
     /*
     |--------------------------------------------------------------------------
