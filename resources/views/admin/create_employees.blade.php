@@ -270,7 +270,7 @@
             <form id="create-emp-form" action="{{ route('admin_store_employees') }}" method="POST">
                 @csrf
 
-                {{-- ✅ แสดงกลุ่มงาน (ดึงจาก DB) แต่แก้ไม่ได้ --}}
+                {{-- แสดงกลุ่มงาน (ดึงจาก DB) แต่แก้ไม่ได้ --}}
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">กลุ่มงาน</label>
@@ -331,7 +331,7 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group
+                    <div class="form-group">
                     <div class=" form-group">
                         <label class="form-label">รหัสผ่าน</label>
                         <input type="password" name="password"

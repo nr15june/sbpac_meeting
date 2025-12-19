@@ -295,9 +295,9 @@
 
                 <div class="form-group">
                     <label class="form-label">จำนวนคน/ห้อง</label>
-                    <input type="number" name="capacity" min="1"
+                    <input type="number" name="quantity" min="1"
                         class="form-input"
-                        value="{{ old('capacity', $room->capacity) }}"
+                        value="{{ old('quantity', $room->quantity) }}"
                         placeholder="เช่น 10">
                 </div>
             </div>

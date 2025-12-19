@@ -11,38 +11,37 @@ use Illuminate\Support\Facades\Hash;
 class AdminEmployeeController extends Controller
 {
     public function index(Request $request)
-{
-    if (!session('admin_logged_in')) {
-        return redirect()->route('admin.login');
+    {
+        if (!session('admin_logged_in')) {
+            return redirect()->route('admin.login');
+        }
+
+        $admin = Admin::findOrFail(session('admin_id'));
+
+        // รับค่าค้นหา
+        $q = trim($request->get('q'));
+
+        $employees = Employee::with('department')
+            ->where('department_id', $admin->department_id)
+            ->when($q, function ($query) use ($q) {
+                $query->where(function ($sub) use ($q) {
+                    $sub->where('citizen_id', 'like', "%{$q}%")
+                        ->orWhere('first_name', 'like', "%{$q}%")
+                        ->orWhere('last_name', 'like', "%{$q}%")
+                        ->orWhereRaw("CONCAT(first_name,' ',last_name) LIKE ?", ["%{$q}%"])
+                        ->orWhere('phone', 'like', "%{$q}%")
+                        ->orWhere('email', 'like', "%{$q}%")
+                        ->orWhereHas('department', function ($d) use ($q) {
+                            $d->where('name', 'like', "%{$q}%");
+                        });
+                });
+            })
+            ->orderBy('first_name')
+            ->get();
+
+        // ส่ง $q ไปให้ blade เพื่อให้ช่องค้นหาค้างค่าเดิม
+        return view('admin.employees', compact('employees', 'q'));
     }
-
-    $admin = Admin::findOrFail(session('admin_id'));
-
-    // ✅ รับค่าค้นหา
-    $q = trim($request->get('q'));
-
-    $employees = Employee::with('department')
-        ->where('department_id', $admin->department_id)
-        ->when($q, function ($query) use ($q) {
-            $query->where(function ($sub) use ($q) {
-                $sub->where('citizen_id', 'like', "%{$q}%")
-                    ->orWhere('first_name', 'like', "%{$q}%")
-                    ->orWhere('last_name', 'like', "%{$q}%")
-                    ->orWhereRaw("CONCAT(first_name,' ',last_name) LIKE ?", ["%{$q}%"])
-                    ->orWhere('phone', 'like', "%{$q}%")
-                    ->orWhere('email', 'like', "%{$q}%")
-                    ->orWhereHas('department', function ($d) use ($q) {
-                        $d->where('name', 'like', "%{$q}%");
-                    });
-            });
-        })
-        ->orderBy('first_name')
-        ->get();
-
-    // ✅ ส่ง $q ไปให้ blade เพื่อให้ช่องค้นหาค้างค่าเดิม
-    return view('admin.employees', compact('employees', 'q'));
-}
-
 
     public function create()
     {
@@ -52,15 +51,15 @@ class AdminEmployeeController extends Controller
 
         $admin = Admin::findOrFail(session('admin_id'));
 
-        // ดึงชื่อกลุ่มงานจากตาราง departments
         $dept = Department::find($admin->department_id);
 
         $departmentId = $admin->department_id;
-        $departmentName = $dept?->name; // ถ้าไม่เจอจะเป็น null
+        $departmentName = $dept?->name; 
 
         return view('admin.create_employees', compact('departmentId', 'departmentName'));
     }
-   public function store(Request $request)
+    
+    public function store(Request $request)
     {
         if (!session('admin_logged_in')) {
             return redirect()->route('admin.login');
@@ -70,8 +69,8 @@ class AdminEmployeeController extends Controller
 
         $request->validate([
             'citizen_id' => 'required|digits:13|unique:employees,citizen_id',
-            'email'      => 'required|email|unique:employees,email',   
-            'password'   => 'required|min:6|confirmed',               
+            'email'      => 'required|email|unique:employees,email',
+            'password'   => 'required|min:6|confirmed',
             'first_name' => 'required|string|max:255',
             'last_name'  => 'required|string|max:255',
             'phone'      => 'nullable|string|max:20',
@@ -79,12 +78,12 @@ class AdminEmployeeController extends Controller
 
         Employee::create([
             'citizen_id'    => $request->citizen_id,
-            'email'         => $request->email,                     
-            'password'      => Hash::make($request->password),         
+            'email'         => $request->email,
+            'password'      => Hash::make($request->password),
             'first_name'    => $request->first_name,
             'last_name'     => $request->last_name,
             'phone'         => $request->phone,
-            'department_id' => $admin->department_id,                 
+            'department_id' => $admin->department_id,
         ]);
 
         return redirect()
@@ -112,8 +111,8 @@ class AdminEmployeeController extends Controller
         $employee = Employee::findOrFail($id);
 
         $request->validate([
-            'citizen_id' => 'required|digits:13|unique:employees,citizen_id,'.$employee->id,
-            'email'      => 'required|email|unique:employees,email,'.$employee->id,
+            'citizen_id' => 'required|digits:13|unique:employees,citizen_id,' . $employee->id,
+            'email'      => 'required|email|unique:employees,email,' . $employee->id,
             'first_name' => 'required|string|max:255',
             'last_name'  => 'required|string|max:255',
             'phone'      => 'nullable|string|max:20',

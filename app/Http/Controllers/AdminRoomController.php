@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminRoomController extends Controller
 {
-    // แสดงหน้า meetingroom + รายการห้องทั้งหมด
     public function index()
     {
         $rooms = Room::all();
@@ -16,13 +15,12 @@ class AdminRoomController extends Controller
         return view('admin.meetingroom', compact('rooms'));
     }
 
-    // บันทึกห้องใหม่
     public function store(Request $request)
     {
         $request->validate([
             'room_name'   => 'required|string|max:255',
             'building'    => 'nullable|string|max:255',
-            'capacity'    => 'nullable|integer',
+            'quantity'    => 'nullable|integer',
             'description' => 'nullable|string',
             'room_image'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -35,7 +33,7 @@ class AdminRoomController extends Controller
         Room::create([
             'room_name'   => $request->room_name,
             'building'    => $request->building,
-            'quantity'    => $request->capacity,   // ใช้ field quantity ในฐานข้อมูล
+            'quantity'    => $request->quantity, 
             'description' => $request->description,
             'room_image'  => $imagePath,
         ]);
@@ -72,14 +70,14 @@ class AdminRoomController extends Controller
         $request->validate([
             'room_name'   => 'required|string|max:255',
             'building'    => 'nullable|string|max:255',
-            'capacity'    => 'nullable|integer|min:1',
+            'quantity'    => 'nullable|integer|min:1',
             'description' => 'nullable|string',
             'room_image'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $room->room_name   = $request->room_name;
         $room->building    = $request->building;
-        $room->quantity    = $request->capacity;
+        $room->quantity    = $request->quantity;
         $room->description = $request->description;
 
         if ($request->hasFile('room_image')) {

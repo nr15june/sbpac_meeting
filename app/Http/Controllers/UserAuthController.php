@@ -33,16 +33,11 @@ class UserAuthController extends Controller
 
         session([
             'user_logged_in'   => true,
-
-            // ✅ สำคัญ: ใช้ employee_id ผูก booking
             'employee_id'      => $employee->id,
-
-            // ✅ ข้อมูลผู้ใช้ (ไว้โชว์/ล็อกในฟอร์ม)
             'user_name'        => $employee->first_name . ' ' . $employee->last_name,
             'first_name'       => $employee->first_name,
             'last_name'        => $employee->last_name,
             'phone'            => $employee->phone,
-
             'department_id'    => $employee->department_id,
             'department_name'  => $department?->name,
         ]);
