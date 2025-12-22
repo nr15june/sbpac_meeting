@@ -82,7 +82,6 @@
         margin-top: 1.5rem;
     }
 
-    .btn-edit,
     .btn-delete {
         display: inline-flex;
         align-items: center;
@@ -95,14 +94,6 @@
         cursor: pointer;
         text-decoration: none;
         color: white;
-    }
-
-    .btn-edit {
-        background-color: #3b82f6;
-    }
-
-    .btn-edit:hover {
-        background-color: #5c9bff;
     }
 
     .btn-delete {
