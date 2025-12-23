@@ -287,10 +287,10 @@
 
                     <div class="form-group">
                         <label class="form-label">เลขบัตรประชาชน</label>
-                        <input type="text" name="citizen_id" maxlength="13"
+                        <input type="text" name="card_id" maxlength="13"
                             class="form-input" placeholder="13 หลัก"
-                            value="{{ old('citizen_id') }}">
-                        @error('citizen_id') <div class="error-msg">{{ $message }}</div> @enderror
+                            value="{{ old('card_id') }}">
+                        @error('card_id') <div class="error-msg">{{ $message }}</div> @enderror
                     </div>
                 </div>
 
@@ -331,7 +331,6 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
                     <div class=" form-group">
                         <label class="form-label">รหัสผ่าน</label>
                         <input type="password" name="password"

@@ -25,7 +25,7 @@ class AdminEmployeeController extends Controller
             ->where('department_id', $admin->department_id)
             ->when($q, function ($query) use ($q) {
                 $query->where(function ($sub) use ($q) {
-                    $sub->where('citizen_id', 'like', "%{$q}%")
+                    $sub->where('card_id', 'like', "%{$q}%")
                         ->orWhere('first_name', 'like', "%{$q}%")
                         ->orWhere('last_name', 'like', "%{$q}%")
                         ->orWhereRaw("CONCAT(first_name,' ',last_name) LIKE ?", ["%{$q}%"])
@@ -68,7 +68,7 @@ class AdminEmployeeController extends Controller
         $admin = Admin::findOrFail(session('admin_id'));
 
         $request->validate([
-            'citizen_id' => 'required|digits:13|unique:employees,citizen_id',
+            'card_id' => 'required|digits:13|unique:employees,card_id',
             'email'      => 'required|email|unique:employees,email',
             'password'   => 'required|min:6|confirmed',
             'first_name' => 'required|string|max:255',
@@ -77,7 +77,7 @@ class AdminEmployeeController extends Controller
         ]);
 
         Employee::create([
-            'citizen_id'    => $request->citizen_id,
+            'card_id'    => $request->card_id,
             'email'         => $request->email,
             'password'      => Hash::make($request->password),
             'first_name'    => $request->first_name,
@@ -111,7 +111,7 @@ class AdminEmployeeController extends Controller
         $employee = Employee::findOrFail($id);
 
         $request->validate([
-            'citizen_id' => 'required|digits:13|unique:employees,citizen_id,' . $employee->id,
+            'card_id' => 'required|digits:13|unique:employees,card_id,' . $employee->id,
             'email'      => 'required|email|unique:employees,email,' . $employee->id,
             'first_name' => 'required|string|max:255',
             'last_name'  => 'required|string|max:255',
@@ -119,7 +119,7 @@ class AdminEmployeeController extends Controller
         ]);
 
         $employee->update([
-            'citizen_id' => $request->citizen_id,
+            'card_id' => $request->card_id,
             'email'      => $request->email,
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,

@@ -325,7 +325,7 @@
             <tbody>
                 @forelse($employees as $emp)
                 <tr>
-                    <td>{{ $emp->citizen_id }}</td>
+                    <td>{{ $emp->card_id }}</td>
                     <td>{{ $emp->first_name }}</td>
                     <td>{{ $emp->last_name }}</td>
                     <td>{{ $emp->phone }}</td>

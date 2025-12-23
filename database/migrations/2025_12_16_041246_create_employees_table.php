@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
 
-            $table->string('citizen_id', 13)->unique();
+            $table->string('card_id', 13)->unique();
 
             // 🔐 สำหรับ login
             $table->string('email')->unique();
