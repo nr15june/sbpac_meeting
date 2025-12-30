@@ -5,94 +5,173 @@
 @section('content')
 
 <style>
+    /* ===== Page Background ===== */
+    main {
+        background: #f3f4f6;
+    }
+
+    :root {
+        --brand: #25A6D5;
+        --ink: #0f172a;
+        --muted: #64748b;
+        --line: #e5e7eb;
+        --card: #ffffff;
+        --soft: #f8fafc;
+        --today: #dcfce7;
+        --weekend: #f1f5f9;
+        --bookbg: #fff7d6;
+        --shadow: 0 10px 30px rgba(15, 23, 42, .08);
+    }
+
     .cal-wrapper {
-        max-width: 1100px;
+        max-width: 1120px;
         margin: 0 auto;
-        padding: 0 1rem;
+        padding: 0 1rem 1.5rem;
     }
 
-    .cal-header {
+    /* ===== Header Card ===== */
+    .cal-hero {
+        background: linear-gradient(135deg, #ffffff 0%, #ffffff 60%, #eefaff 100%);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: 16px 18px;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
-        margin-bottom: .35rem;
-        padding: 1rem 1.5rem;
-        background-color: #ffffff;
-        border: 1px solid #ebeaeaff;
-        border-radius: 0.450rem;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
     }
 
-    .cal-header-left {
+    .cal-hero-left {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 12px;
     }
 
-    .cal-header-icon {
-        width: 2rem;
-        height: 2rem;
-        border-radius: 0.375rem;
-        background-color: #ffffff;
-        border: 1px solid #d4d4d4;
+    .cal-hero-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 16px;
+        background: rgba(37, 166, 213, .12);
+        color: var(--brand);
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 22px;
+        border: 1px solid rgba(37, 166, 213, .18);
     }
 
-    .cal-header-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #1f2933;
+    .cal-hero-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--ink);
+        letter-spacing: .2px;
     }
 
+    .cal-hero-sub {
+        margin: 2px 0 0 0;
+        font-size: 12.5px;
+        color: var(--muted);
+    }
+
+    /* ===== Month Bar ===== */
     .cal-monthbar {
-        margin-top: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 2rem;
-        padding: .35rem .65rem;
+        gap: 10px;
+        margin: 10px 0 12px;
     }
 
-    .cal-navbtn-circle {
-        width: 1.5rem;
-        height: 1.5rem;
+    .cal-monthpill {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        background: var(--card);
+        border: 1px solid var(--line);
         border-radius: 999px;
-        background-color: #f1f1f1ff;
-        color: #636262ff;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, .06);
+    }
+
+    .cal-navbtn {
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: #334155;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1rem;
         text-decoration: none;
-        transition: all 0.15s ease;
-        font-weight: 1000;
+        transition: .15s ease;
     }
 
-    .cal-navbtn-circle:hover {
-        background-color: #c7c7c7ff;
+    .cal-navbtn:hover {
+        background: #f1f5f9;
+        transform: translateY(-1px);
     }
 
-    .cal-navbtn-circle:active {
-        transform: scale(0.9);
-        background-color: #c2c2c2ff;
+    .cal-navbtn:active {
+        transform: scale(.97);
     }
 
     .cal-monthtitle {
-        font-weight: 700;
-        font-size: 1.05rem;
-        color: #111;
-        min-width: auto;
-        text-align: left;
+        font-weight: 900;
+        color: var(--ink);
+        font-size: 15px;
+        letter-spacing: .2px;
+        min-width: 170px;
+        text-align: center;
     }
 
-    .cal-tablewrap {
+    /* ===== Legend ===== */
+    .cal-legend {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 0 2px 10px;
+    }
+
+    .cal-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: #334155;
         background: #fff;
-        border-radius: 6px;
+        border: 1px solid var(--line);
+        padding: 6px 10px;
+        border-radius: 999px;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, .04);
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #cbd5e1;
+    }
+
+    .dot.today {
+        background: #22c55e;
+    }
+
+    .dot.book {
+        background: #f59e0b;
+    }
+
+    /* ===== Calendar Table ===== */
+    .cal-tablewrap {
+        background: var(--card);
+        border-radius: 16px;
+        border: 1px solid var(--line);
         overflow: hidden;
-        border: 1px solid #d4d4d4;
-        margin-top: .8rem;
+        box-shadow: var(--shadow);
     }
 
     .cal-table {
@@ -102,66 +181,120 @@
         table-layout: fixed;
     }
 
-    .cal-table th {
-        background: #f3f4f6;
-        padding: .55rem .25rem;
-        font-size: .85rem;
-        font-weight: 700;
-        color: #111;
-        border-right: 1px solid #d4d4d4;
-        border-bottom: 1px solid #d4d4d4;
+    .cal-table thead th {
+        background: #f8fafc;
+        padding: 12px 8px;
+        font-size: 12.5px;
+        font-weight: 900;
+        color: #111827;
+        border-bottom: 1px solid var(--line);
         text-align: center;
     }
 
-    .cal-table th:last-child {
-        border-right: none;
+    .cal-table thead th+th {
+        border-left: 1px solid var(--line);
     }
 
     .cal-table td {
-        height: 120px;
+        height: 128px;
         vertical-align: top;
-        border-right: 1px solid #d4d4d4;
-        border-bottom: 1px solid #d4d4d4;
-        background: #fff;
-        padding: .35rem;
+        border-bottom: 1px solid var(--line);
         position: relative;
+        background: #fff;
     }
 
-    .cal-table tr td:last-child {
-        border-right: none;
-    }
-
-    .cal-out {
-        color: #9ca3af;
-        background: #fafafa;
+    .cal-table td+td {
+        border-left: 1px solid var(--line);
     }
 
     .cal-daylink {
         display: block;
-        width: 100%;
         height: 100%;
+        width: 100%;
+        padding: 10px;
         text-decoration: none;
         color: inherit;
-        border-radius: 4px;
-        padding: .15rem;
+        transition: .15s ease;
+        position: relative;
+    }
+
+    .cal-daylink:hover {
+        background: #f8fafc;
+        box-shadow: inset 0 0 0 1px rgba(37, 166, 213, .18);
     }
 
     .cal-daynum {
         position: absolute;
-        top: 8px;
-        right: 10px;
-        font-size: .9rem;
-        font-weight: 700;
-        color: #111;
+        top: 10px;
+        right: 12px;
+        font-size: 14px;
+        font-weight: 900;
+        color: var(--ink);
         line-height: 1;
     }
 
-    .cal-hasbooking {
-        background: #fff5cc;
+    .cal-out {
+        background: #fafafa;
+        color: #94a3b8;
     }
 
-    .cal-hasbooking:hover {
-        filter: brightness(0.98);
+    .cal-out .cal-daynum {
+        color: #94a3b8;
+    }
+
+    .cal-weekend .cal-daylink {
+        background: var(--weekend);
+    }
+
+    .cal-weekend .cal-daylink:hover {
+        background: #eaf0f7;
+    }
+
+    .cal-today .cal-daylink {
+        background: var(--today);
+        box-shadow: inset 0 0 0 1px rgba(34, 197, 94, .25);
+    }
+
+    .cal-hasbooking .cal-daylink {
+        background: var(--bookbg);
+        box-shadow: inset 0 0 0 1px rgba(245, 158, 11, .25);
+    }
+
+    .cal-hasbooking .cal-daylink:hover {
+        filter: brightness(.99);
+        box-shadow: inset 0 0 0 1px rgba(245, 158, 11, .35);
+    }
+
+    .cal-count {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 9px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid rgba(245, 158, 11, .35);
+        color: #92400e;
+        font-size: 12px;
+        font-weight: 800;
+        box-shadow: 0 6px 14px rgba(15, 23, 42, .08);
+    }
+
+    .cal-count i {
+        font-size: 13px;
+    }
+
+    @media (max-width:720px) {
+        .cal-monthtitle {
+            min-width: 120px;
+            font-size: 14px;
+        }
+
+        .cal-table td {
+            height: 110px;
+        }
     }
 </style>
 
@@ -175,31 +308,42 @@ $thaiYear = (int)$current->format('Y') + 543;
 
 $prevMonth = $current->copy()->subMonth()->format('Y-m');
 $nextMonth = $current->copy()->addMonth()->format('Y-m');
+
+$today = now()->toDateString(); // ✅ ไฮไลต์วันนี้
 @endphp
 
 <div class="cal-wrapper">
 
-    <div class="cal-header">
-        <div class="cal-header-left">
-            <div class="cal-header-icon">
+    <div class="cal-hero">
+        <div class="cal-hero-left">
+            <div class="cal-hero-icon">
                 <i class="bi bi-calendar2-event"></i>
             </div>
-            <h1 class="cal-header-title">ระบบจองห้องประชุม</h1>
+            <div>
+                <h1 class="cal-hero-title">ปฏิทินการใช้ห้องประชุม</h1>
+                <p class="cal-hero-sub">คลิกวันที่เพื่อดูรายละเอียดการจองรายวัน</p>
+            </div>
         </div>
     </div>
 
     <div class="cal-monthbar">
-        <a class="cal-navbtn-circle" href="{{ route('user_calendar', ['month' => $prevMonth]) }}">
-            <i class="bi bi-chevron-left"></i>
-        </a>
+        <div class="cal-monthpill">
+            <a class="cal-navbtn" href="{{ route('user_calendar', ['month' => $prevMonth]) }}" title="เดือนก่อนหน้า">
+                <i class="bi bi-chevron-left"></i>
+            </a>
 
-        <div class="cal-monthtitle">{{ $monthName }} {{ $thaiYear }}</div>
+            <div class="cal-monthtitle">{{ $monthName }} {{ $thaiYear }}</div>
 
-        <a class="cal-navbtn-circle" href="{{ route('user_calendar', ['month' => $nextMonth]) }}">
-            <i class="bi bi-chevron-right"></i>
-        </a>
+            <a class="cal-navbtn" href="{{ route('user_calendar', ['month' => $nextMonth]) }}" title="เดือนถัดไป">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
     </div>
-
+    <div class="cal-legend">
+        <span class="cal-tag"><span class="dot today"></span> วันนี้</span>
+        <span class="cal-tag"><span class="dot book"></span> มีการจอง</span>
+        <span class="cal-tag"><span class="dot"></span> ปกติ</span>
+    </div>
     <div class="cal-tablewrap">
         <table class="cal-table">
             <thead>
@@ -213,6 +357,7 @@ $nextMonth = $current->copy()->addMonth()->format('Y-m');
                     <th>อาทิตย์</th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach($weeks as $week)
                 <tr>
@@ -220,15 +365,33 @@ $nextMonth = $current->copy()->addMonth()->format('Y-m');
                     @php
                     $dateKey = $day->toDateString();
                     $isCurrentMonth = $day->month === $current->month;
+
                     $count = (int)($countsByDate[$dateKey] ?? 0);
                     $hasBooking = $count > 0;
+
+                    $isWeekend = in_array($day->isoWeekday(), [6,7]);
+                    $isToday = $dateKey === $today;
+
+                    $tdClass = trim(implode(' ', array_filter([
+                    $isCurrentMonth ? '' : 'cal-out',
+                    $isWeekend ? 'cal-weekend' : '',
+                    $hasBooking ? 'cal-hasbooking' : '',
+                    $isToday ? 'cal-today' : '',
+                    ])));
                     @endphp
 
-                    <td class="{{ $isCurrentMonth ? '' : 'cal-out' }}">
-                        <a class="cal-daylink {{ $hasBooking ? 'cal-hasbooking' : '' }}"
+                    <td class="{{ $tdClass }}">
+                        <a class="cal-daylink"
                             href="{{ route('user_calendar_day', $dateKey) }}"
-                            title="{{ $hasBooking ? 'มีการจอง' : 'ดูรายละเอียดวันที่ '.$dateKey }}">
+                            title="{{ $hasBooking ? 'มีการจอง '.$count.' รายการ' : 'ดูรายละเอียดวันที่ '.$dateKey }}">
                             <div class="cal-daynum">{{ $day->format('j') }}</div>
+
+                            @if($hasBooking)
+                            <div class="cal-count">
+                                <i class="bi bi-bookmark-star-fill"></i>
+                                {{ $count }} รายการ
+                            </div>
+                            @endif
                         </a>
                     </td>
                     @endforeach
@@ -239,4 +402,5 @@ $nextMonth = $current->copy()->addMonth()->format('Y-m');
     </div>
 
 </div>
+
 @endsection

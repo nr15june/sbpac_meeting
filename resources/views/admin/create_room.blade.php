@@ -4,251 +4,403 @@
 
 @section('content')
 
-{{-- ============ CSS เฉพาะหน้านี้ ============ --}}
 <style>
-    .create-room-wrapper {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 0 1rem;
+    main {
+        background: #f3f4f6;
     }
 
-    /* แถบหัวข้อ + ปุ่มย้อนกลับ */
-    .create-room-header {
+    :root {
+        --brand: #25A6D5;
+        --ink: #0f172a;
+        --muted: #64748b;
+        --line: #e5e7eb;
+        --card: #ffffff;
+        --soft: #f8fafc;
+        --shadow: 0 10px 30px rgba(15, 23, 42, .08);
+        --yellow: #F5D020;
+        --ok: #22c55e;
+    }
+
+    .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 1rem 1.5rem;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+        background: linear-gradient(135deg, #ffffff 0%, #ffffff 62%, #eefaff 100%);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: 16px 18px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 1.5rem;
-        padding: 1rem 1.5rem;
-        background-color: #ffffff;
-        border: 1px solid #ebeaeaff;
-        border-radius: 0.450rem;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        gap: 12px;
+        margin-bottom: 14px;
     }
 
-    .create-room-header-left {
+    .hero-left {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 12px;
     }
 
-    .create-room-icon {
-        width: 2rem;
-        height: 2rem;
-        border-radius: 0.375rem;
-        background-color: #ffffff;
-        border: 1px solid #d4d4d4;
+    .hero-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 16px;
+        background: rgba(37, 166, 213, .12);
+        color: var(--brand);
+        border: 1px solid rgba(37, 166, 213, .18);
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 22px;
+        flex: 0 0 auto;
     }
 
-    .create-room-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #1f2933;
+    .hero-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 1000;
+        color: var(--ink);
+        letter-spacing: .2px;
+        line-height: 1.1;
     }
 
-    .btn-back:hover {
-        background-color: #f3f4f6;
+    .hero-sub {
+        margin: 4px 0 0 0;
+        font-size: 12.5px;
+        color: var(--muted);
     }
 
     .btn-back {
         display: inline-flex;
         align-items: center;
-        gap: .5rem;
-        padding: 0.45rem 1.1rem;
-        border-radius: 8px;
-        border: 1px solid #d1d5db;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 14px;
         background: #fff;
-        color: #111827;
-        font-size: .875rem;
-        font-weight: 600;
+        border: 1px solid var(--line);
+        color: var(--ink);
+        font-weight: 1000;
         text-decoration: none;
-        cursor: pointer;
+        box-shadow: 0 6px 12px rgba(15, 23, 42, .06);
+        transition: .15s ease;
+        white-space: nowrap;
     }
 
     .btn-back:hover {
-        background-color: #f3f4f6;
+        background: var(--soft);
+        transform: translateY(-1px);
     }
 
-    .create-room-card {
-        background-color: #ffffff;
-        border: 1px solid #e9eaebff;
-        border-radius: 0.375rem;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    .btn-back:active {
+        transform: scale(.98);
     }
 
-    .create-room-card-header {
-        padding: 0.75rem 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
-        font-size: 1rem;
-        font-weight: 500;
-        color: #1f2933;
-        background-color: #F7F7F7;
+    /* ===== Card ===== */
+    .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
     }
 
-    .create-room-card-body {
-        padding: 1.5rem;
+    .card-hd {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--line);
+        background: #fbfdff;
+        font-weight: 1000;
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
     }
 
-    .form-group {
-        margin-bottom: 1rem;
+    .card-bd {
+        padding: 16px;
     }
 
-    .form-label {
-        display: block;
-        font-size: 0.875rem;
-        margin-bottom: 0.25rem;
-        color: #374151;
-    }
-
-    .form-input,
-    .form-textarea,
-    .form-file {
-        width: 100%;
-        border-radius: 0.375rem;
-        border: 1px solid #d1d5db;
-        padding: 0.5rem 0.75rem;
-        font-size: 0.875rem;
-        outline: none;
-        background-color: #ffffff;
-    }
-
-    .form-input:focus,
-    .form-textarea:focus,
-    .form-file:focus {
-        border-color: #9ca3af;
-        box-shadow: 0 0 0 1px #9ca3af33;
-    }
-
-    .form-textarea {
-        resize: none;
-        min-height: 6rem;
-    }
-
-    .form-row {
+    /* ===== Form Layout ===== */
+    .grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 12px;
+        align-items: start;
     }
 
-    @media (min-width: 768px) {
-        .form-row {
+    @media (min-width: 860px) {
+        .grid {
+            grid-template-columns: 1.2fr .8fr;
+        }
+    }
+
+    .form {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .row-2 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    @media (min-width: 820px) {
+        .row-2 {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
     }
 
-    .btn-submit-wrapper {
-        padding-top: 0.5rem;
+    .label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: #334155;
+        font-weight: 900;
+        margin-bottom: 6px;
+    }
+
+    .input,
+    .textarea,
+    .file {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid #d1d5db;
+        background: #fff;
+        font-size: 14px;
+        outline: none;
+        transition: .15s ease;
+    }
+
+    .input {
+        height: 44px;
+        padding: 0 12px;
+    }
+
+    .textarea {
+        min-height: 120px;
+        padding: 10px 12px;
+        resize: vertical;
+    }
+
+    .file {
+        height: 44px;
+        padding: 8px 12px;
+    }
+
+    .input:focus,
+    .textarea:focus,
+    .file:focus {
+        border-color: rgba(37, 166, 213, .55);
+        box-shadow: 0 0 0 4px rgba(37, 166, 213, .12);
+    }
+
+    /* ===== Preview ===== */
+    .preview {
+        border: 1px dashed #cbd5e1;
+        border-radius: 18px;
+        background: #f8fafc;
+        overflow: hidden;
+        min-height: 260px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .preview-hd {
+        padding: 12px 14px;
+        border-bottom: 1px dashed #cbd5e1;
+        font-weight: 1000;
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .preview-hd small {
+        color: var(--muted);
+        font-weight: 800;
+    }
+
+    .preview-body {
+        padding: 12px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .preview-img {
+        width: 100%;
+        height: 230px;
+        border-radius: 14px;
+        object-fit: cover;
+        display: none;
+    }
+
+    .preview-empty {
+        color: #94a3b8;
+        font-weight: 900;
+        text-align: center;
+        padding: 18px;
+    }
+
+    /* ===== Footer actions (ชิดขวาสุดของทั้ง card) ===== */
+    .grid-footer {
+        grid-column: 1 / -1;
+        /* span ทั้ง 2 คอลัมน์ */
         display: flex;
         justify-content: flex-end;
+        /* ชิดขวาสุด */
+        gap: 10px;
+        padding-top: 6px;
     }
 
-    .btn-submit {
-        padding: 0.45rem 1.2rem;
-        border-radius: 8px;
-        border: none;
-        background-color: #F5D020;
-        font-size: 0.875rem;
-        font-weight: 600;
+    .btn-save {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: 14px;
+        border: 1px solid rgba(0, 0, 0, .06);
+        background: linear-gradient(135deg, var(--yellow) 0%, #F2C230 100%);
         color: #111827;
+        font-weight: 1000;
         cursor: pointer;
+        box-shadow: 0 10px 18px rgba(245, 208, 32, .25), 0 6px 12px rgba(15, 23, 42, .08);
+        transition: .15s ease;
+        white-space: nowrap;
     }
 
-    .btn-submit:hover {
-        background-color: #f2c739;
+    .btn-save:hover {
+        transform: translateY(-1px);
+        filter: brightness(.98);
     }
 
-    .btn-cancel {
-        padding: 0.5rem 1.4rem;
-        background: #BDBDBD;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        cursor: pointer;
+    .btn-save:active {
+        transform: scale(.98);
     }
 
-    .btn-cancel:hover {
-        background: #a8a8a8ff;
-    }
-
-    .btn-confirm {
-        padding: 0.5rem 1.4rem;
-        background: #7ED957;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        cursor: pointer;
-        border: none;
-    }
-
-    .btn-confirm:hover {
-        background: #6CB94C;
-    }
-
+    /* ===== Popup ===== */
     .popup-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.45);
-        display: flex;
+        background: rgba(15, 23, 42, 0.55);
+        display: none;
         align-items: center;
         justify-content: center;
         z-index: 9999;
+        backdrop-filter: blur(2px);
     }
 
     .popup-box {
-        background: #ffffff;
-        padding: 2.5rem 3rem;
-        border-radius: 10px;
-        text-align: center;
-        min-width: 320px;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-        animation: popupShow 0.25s ease-out;
+        width: min(440px, 92vw);
+        background: #fff;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        box-shadow: 0 22px 60px rgba(0, 0, 0, .25);
+        padding: 18px 18px 16px;
+        animation: pop .18s ease-out;
     }
 
-    .popup-icon-circle {
-        width: 70px;
-        height: 70px;
-        border-radius: 9999px;
-        border: 3px solid #7ED957;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1.2rem auto;
-    }
-
-    .popup-icon-circle i {
-        font-size: 2.2rem;
-        color: #7ED957;
-    }
-
-    .popup-text {
-        font-size: 1rem;
-        font-weight: 500;
-        color: #111827;
-    }
-
-    @keyframes popupShow {
+    @keyframes pop {
         from {
-            transform: scale(0.85);
+            transform: translateY(8px) scale(.98);
             opacity: 0;
         }
 
         to {
-            transform: scale(1);
+            transform: translateY(0) scale(1);
             opacity: 1;
         }
     }
+
+    .popup-top {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .popup-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 16px;
+        background: rgba(34, 197, 94, .12);
+        color: var(--ok);
+        border: 1px solid rgba(34, 197, 94, .22);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex: 0 0 auto;
+    }
+
+    .popup-title {
+        margin: 2px 0 0 0;
+        font-weight: 1000;
+        color: var(--ink);
+        font-size: 16px;
+    }
+
+    .popup-text {
+        margin: 6px 0 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+    .popup-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    .btn-cancel {
+        padding: 10px 14px;
+        border-radius: 14px;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        font-weight: 1000;
+        cursor: pointer;
+    }
+
+    .btn-cancel:hover {
+        background: #eaf0f7;
+    }
+
+    .btn-confirm {
+        padding: 10px 14px;
+        border-radius: 14px;
+        background: #22c55e;
+        border: 1px solid #16a34a;
+        color: #fff;
+        font-weight: 1000;
+        cursor: pointer;
+    }
+
+    .btn-confirm:hover {
+        filter: brightness(.95);
+    }
 </style>
 
-{{-- ============ เนื้อหา ============ --}}
-<div class="create-room-wrapper">
+<div class="wrap">
 
-    {{-- แถบหัวข้อ + ปุ่มย้อนกลับ --}}
-    <div class="create-room-header">
-        <div class="create-room-header-left">
-            <div class="create-room-icon">
-                <i class="bi bi-calendar2-plus" style="font-size: 1.25rem; color: #374151;"></i>
+    <div class="hero">
+        <div class="hero-left">
+            <div class="hero-icon"><i class="bi bi-calendar2-plus"></i></div>
+            <div>
+                <div class="hero-title">เพิ่มห้องประชุม</div>
+                <div class="hero-sub">กรอกข้อมูลห้องประชุมและอัปโหลดรูปภาพประกอบ</div>
             </div>
-            <h1 class="create-room-title">เพิ่มห้องประชุม</h1>
         </div>
 
         <a href="{{ route('admin_meetingrooms') }}" class="btn-back">
@@ -256,99 +408,124 @@
         </a>
     </div>
 
-    {{-- กล่องฟอร์ม --}}
-    <div class="create-room-card">
-
-        {{-- หัวข้อย่อย --}}
-        <div class="create-room-card-header">
-            รายละเอียดห้องประชุม
+    <div class="card">
+        <div class="card-hd">
+            <span>รายละเอียดห้องประชุม</span>
+            <span style="font-size:12px;color:var(--muted);font-weight:900;">(*) แนะนำกรอกให้ครบเพื่อค้นหา/แสดงผลได้ดี</span>
         </div>
 
-        {{-- ฟอร์มเพิ่มห้อง --}}
-        <form id="create-room-form"
-            action="{{ route('rooms.store') }}"
-            method="POST"
-            enctype="multipart/form-data"
-            class="create-room-card-body">
-            @csrf
+        <div class="card-bd">
+            <div class="grid">
 
-            {{-- ชื่อห้องประชุม --}}
-            <div class="form-group">
-                <label class="form-label">ชื่อห้องประชุม</label>
-                <input type="text" name="room_name"
-                    class="form-input"
-                    placeholder="ระบุชื่อห้องประชุม">
-            </div>
+                {{-- FORM --}}
+                <form id="create-room-form"
+                    action="{{ route('rooms.store') }}"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    class="form">
+                    @csrf
 
-            {{-- อาคาร + จำนวนคน/ห้อง --}}
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">อาคาร</label>
-                    <input type="text" name="building"
-                        class="form-input"
-                        placeholder="อาคาร / ชั้น">
+                    <div>
+                        <label class="label"><i class="bi bi-door-open"></i> ชื่อห้องประชุม</label>
+                        <input type="text" name="room_name" class="input" placeholder="ระบุชื่อห้องประชุม" value="{{ old('room_name') }}">
+                    </div>
+
+                    <div class="row-2">
+                        <div>
+                            <label class="label"><i class="bi bi-building"></i> อาคาร</label>
+                            <input type="text" name="building" class="input" placeholder="อาคาร / ชั้น" value="{{ old('building') }}">
+                        </div>
+
+                        <div>
+                            <label class="label"><i class="bi bi-people"></i> จำนวนคน/ห้อง</label>
+                            <input type="number" name="quantity" min="1" class="input" placeholder="เช่น 10" value="{{ old('quantity') }}">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="label"><i class="bi bi-card-text"></i> รายละเอียด</label>
+                        <textarea name="description" class="textarea" placeholder="เช่น มีโปรเจคเตอร์ ไมโครโฟน ไวท์บอร์ด ฯลฯ">{{ old('description') }}</textarea>
+                    </div>
+
+                    <div>
+                        <label class="label"><i class="bi bi-image"></i> รูปภาพ</label>
+                        <input id="roomImageInput" type="file" name="room_image" class="file" accept="image/*">
+                    </div>
+                </form>
+
+                {{-- PREVIEW --}}
+                <div class="preview">
+                    <div class="preview-hd">
+                        <span><i class="bi bi-eye"></i> ตัวอย่างรูปภาพ</span>
+                        <small id="previewName">ยังไม่ได้เลือกรูป</small>
+                    </div>
+                    <div class="preview-body">
+                        <img id="previewImg" class="preview-img" alt="preview">
+                        <div id="previewEmpty" class="preview-empty">
+                            <i class="bi bi-image" style="font-size:24px;display:block;margin-bottom:8px;"></i>
+                            เลือกไฟล์รูปภาพเพื่อดูตัวอย่าง
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">จำนวนคน/ห้อง</label>
-                    <input type="number" name="quantity" min="1"
-                        class="form-input"
-                        placeholder="เช่น 10">
-                </div>
-            </div>
-
-            {{-- รายละเอียด --}}
-            <div class="form-group">
-                <label class="form-label">รายละเอียด</label>
-                <textarea name="description"
-                    class="form-textarea"
-                    placeholder="เช่น มีโปรเจคเตอร์ ไมโครโฟน ไวท์บอร์ด ฯลฯ"></textarea>
-            </div>
-
-            {{-- อัปโหลดรูปภาพ --}}
-            <div class="form-group">
-                <label class="form-label">รูปภาพ</label>
-                <input type="file" name="room_image"
-                    class="form-file">
-            </div>
-
-            {{-- ปุ่มบันทึก --}}
-            <div class="btn-submit-wrapper">
-                {{-- ❌ ไม่ใช้ confirm ของ browser แล้ว --}}
-                {{-- <button type="submit" onclick="return confirm('ยืนยันการบันทึกข้อมูลห้องประชุมหรือไม่?')" class="btn-submit">บันทึก</button> --}}
-
-                {{-- ✅ ใช้ปุ่มเปิด popup แทน --}}
-                <button type="button"
-                    onclick="openConfirmPopup()"
-                    class="btn-submit">
-                    บันทึก
-                </button>
-            </div>
-        </form>
-
-        {{-- ===== Popup Confirm ===== --}}
-        <div id="confirmPopup" class="popup-overlay" style="display: none;">
-            <div class="popup-box">
-                <div class="popup-icon-circle">
-                    <i class="bi bi-question-lg"></i>
+                {{-- ✅ FOOTER ปุ่มชิดขวาสุดของทั้ง card --}}
+                <div class="grid-footer">
+                    <button type="button" class="btn-save" onclick="openConfirmPopup()">
+                        <i class="bi bi-save2"></i> บันทึก
+                    </button>
                 </div>
 
-                <div class="popup-text" style="margin-bottom: 1.2rem;">
-                    ต้องการบันทึกข้อมูลห้องประชุมหรือไม่?
-                </div>
+            </div>
+        </div>
+    </div>
 
-                <div style="display:flex; gap:1rem; justify-content:center;">
-                    <button class="btn-cancel" onclick="closeConfirmPopup()">ยกเลิก</button>
-                    <button class="btn-confirm" onclick="submitForm()">ตกลง</button>
-                </div>
+</div>
+
+{{-- Popup Confirm --}}
+<div id="confirmPopup" class="popup-overlay">
+    <div class="popup-box">
+        <div class="popup-top">
+            <div class="popup-icon"><i class="bi bi-check2-circle"></i></div>
+            <div>
+                <div class="popup-title">ยืนยันการบันทึก</div>
+                <div class="popup-text">ต้องการบันทึกข้อมูลห้องประชุมหรือไม่?</div>
             </div>
         </div>
 
+        <div class="popup-actions">
+            <button class="btn-cancel" type="button" onclick="closeConfirmPopup()">ยกเลิก</button>
+            <button class="btn-confirm" type="button" onclick="submitForm()">ตกลง</button>
+        </div>
     </div>
 </div>
 
-{{-- ============ JS ============ --}}
 <script>
+    // Preview image
+    const input = document.getElementById('roomImageInput');
+    const img = document.getElementById('previewImg');
+    const empty = document.getElementById('previewEmpty');
+    const nameEl = document.getElementById('previewName');
+
+    if (input) {
+        input.addEventListener('change', function() {
+            const file = this.files && this.files[0];
+            if (!file) {
+                img.style.display = 'none';
+                empty.style.display = 'block';
+                nameEl.textContent = 'ยังไม่ได้เลือกรูป';
+                return;
+            }
+
+            nameEl.textContent = file.name;
+
+            const url = URL.createObjectURL(file);
+            img.src = url;
+            img.style.display = 'block';
+            empty.style.display = 'none';
+        });
+    }
+
+    // Popup
     function openConfirmPopup() {
         document.getElementById('confirmPopup').style.display = 'flex';
     }
@@ -358,9 +535,13 @@
     }
 
     function submitForm() {
-        // ส่งฟอร์มจริง
         document.getElementById('create-room-form').submit();
     }
+
+    // click outside close
+    document.getElementById('confirmPopup').addEventListener('click', function(e) {
+        if (e.target === this) closeConfirmPopup();
+    });
 </script>
 
 @endsection

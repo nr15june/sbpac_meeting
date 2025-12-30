@@ -2,413 +2,556 @@
 
 @section('title', 'จองห้องประชุม | ศอ.บต.')
 
-{{-- ========== ส่วน CSS ========== --}}
+@section('content')
+
 <style>
-    /* ===== Layout Wrapper ===== */
-    .booking-wrapper {
-        max-width: 1100px;
+    /* ===== Page Background (เหมือนแอดมิน) ===== */
+    main {
+        background: #f3f4f6;
+    }
+
+    :root {
+        --brand: #25A6D5;
+        --ink: #0f172a;
+        --muted: #64748b;
+        --line: #e5e7eb;
+        --card: #ffffff;
+        --soft: #f8fafc;
+        --warn: #f59e0b;
+        --shadow: 0 10px 30px rgba(15, 23, 42, .08);
+    }
+
+    .bk-wrapper {
+        max-width: 1120px;
         margin: 0 auto;
-        padding: 0 1rem;
+        padding: 0 1rem 1.5rem;
     }
 
-    /* ===== Page Header ===== */
-    .booking-header {
+    /* ===== Hero (เหมือนหน้าแอดมิน) ===== */
+    .bk-hero {
+        background: linear-gradient(135deg, #ffffff 0%, #ffffff 60%, #eefaff 100%);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: 16px 18px;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
-        margin-bottom: 1.25rem;
-        padding: 1rem 1.5rem;
-        background: #ffffff;
-        border: 1px solid #ebeaeaff;
-        border-radius: 12px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
     }
 
-    .booking-header-left {
+    .bk-hero-left {
         display: flex;
         align-items: center;
-        gap: 0.9rem;
+        gap: 12px;
     }
 
-    .booking-header-icon {
-        width: 2.1rem;
-        height: 2.1rem;
-        border-radius: 10px;
-        background: #ffffff;
-        border: 1px solid #d4d4d4;
+    .bk-hero-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 16px;
+        background: rgba(37, 166, 213, .12);
+        color: var(--brand);
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 22px;
+        border: 1px solid rgba(37, 166, 213, .18);
+        flex: 0 0 auto;
     }
 
-    .booking-header-title {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #111827;
+    .bk-hero-title {
         margin: 0;
+        font-size: 18px;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: .2px;
+    }
+
+    .bk-hero-sub {
+        margin: 2px 0 0 0;
+        font-size: 12.5px;
+        color: var(--muted);
+    }
+
+    .bk-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 14px;
+        background: #fff;
+        border: 1px solid var(--line);
+        color: var(--ink);
+        font-weight: 1000;
+        text-decoration: none;
+        box-shadow: 0 6px 12px rgba(15, 23, 42, .06);
+        transition: .15s ease;
+        white-space: nowrap;
+    }
+
+    .bk-back:hover {
+        background: var(--soft);
+        transform: translateY(-1px);
+    }
+
+    .bk-back:active {
+        transform: scale(.98);
+    }
+
+    /* ===== Summary pill (ขวาบน) ===== */
+    .bk-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(37, 166, 213, .10);
+        border: 1px solid rgba(37, 166, 213, .18);
+        color: #0b5f7a;
+        font-weight: 900;
+        font-size: 12.5px;
+        white-space: nowrap;
     }
 
     /* ===== Card ===== */
-    .card-box {
-        background: #ffffff;
-        border-radius: 14px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-        border: 1px solid #e5e7eb;
+    .bk-card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, .06);
         overflow: hidden;
-        margin-bottom: 1.1rem;
+        margin-bottom: 14px;
     }
 
-    .card-header {
-        padding: 0.85rem 1.25rem;
-        border-bottom: 1px solid #e5e7eb;
-        background: #f9fafb;
-        font-size: 0.92rem;
-        font-weight: 700;
-        color: #111827;
+    .bk-card-head {
+        padding: 12px 14px;
+        background: #fbfdff;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
     }
 
-    .card-body {
-        padding: 1.15rem 1.25rem;
+    .bk-card-title {
+        font-weight: 900;
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .bk-card-title i {
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eef2ff;
+        color: #4338ca;
+        border: 1px solid var(--line);
+    }
+
+    .bk-card-body {
+        padding: 14px;
     }
 
     /* ===== Form ===== */
-    .form-label {
+    .bk-label {
         display: block;
-        font-size: 0.82rem;
-        margin-bottom: 0.35rem;
-        color: #374151;
-        font-weight: 600;
+        font-size: 12.5px;
+        font-weight: 800;
+        color: #334155;
+        margin-bottom: 6px;
     }
 
-    .form-input,
-    .form-select,
-    .form-textarea {
+    .bk-input,
+    .bk-select,
+    .bk-textarea {
         width: 100%;
-        border-radius: 10px;
+        border-radius: 12px;
         border: 1px solid #d1d5db;
-        padding: 0.55rem 0.8rem;
-        font-size: 0.88rem;
+        padding: 10px 12px;
+        font-size: 14px;
         outline: none;
-        background: #ffffff;
-        transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+        background: #fff;
+        transition: border-color .15s ease, box-shadow .15s ease;
+
     }
 
-    .form-input:focus,
-    .form-select:focus,
-    .form-textarea:focus {
+    .bk-input:focus,
+    .bk-select:focus,
+    .bk-textarea:focus {
         border-color: #38bdf8;
-        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, .18);
     }
 
-    /* disabled (กลุ่มงาน/ห้องประชุม) */
-    .form-input[disabled],
-    .form-input.bg-gray-100 {
-        background: #f3f4f6;
-        color: #111827;
-        border-color: #e5e7eb;
+    .bk-disabled {
+        background: #f3f4f6 !important;
+        border-color: #e5e7eb !important;
+        color: #0f172a;
     }
 
     /* ===== Error ===== */
     .input-error {
         border-color: #ef4444 !important;
-        background-color: #fef2f2 !important;
+        background: #fef2f2 !important;
     }
 
-    #client-error-banner {
+    .bk-banner {
+        display: none;
+        margin-bottom: 12px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #FEF2F2;
         border: 1px solid #fecaca;
+        color: #b91c1c;
+        font-size: 13px;
+        font-weight: 800;
     }
 
     /* ===== Actions ===== */
-    .booking-actions {
+    .bk-actions {
         display: flex;
         justify-content: flex-end;
-        margin-top: 0.75rem;
+        width: 100%;
+        margin-top: 12px;
     }
 
-    .btn-submit-booking {
-        padding: 0.45rem 1.2rem;
-        border-radius: 8px;
-        border: none;
-        background-color: #F5D020;
-        font-size: 0.875rem;
-        font-weight: 600;
+    .bk-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: 14px;
+        border: 1px solid rgba(0, 0, 0, .06);
+        background: linear-gradient(135deg, var(--yellow) 0%, #F2C230 100%);
         color: #111827;
+        font-weight: 1000;
         cursor: pointer;
+        box-shadow: 0 10px 18px rgba(245, 208, 32, .25), 0 6px 12px rgba(15, 23, 42, .08);
+        transition: .15s ease;
+        white-space: nowrap;
     }
 
-    .btn-submit-booking:hover {
-        background-color: #f2c739;
+    .bk-btn:hover {
+        filter: brightness(.98);
+        transform: translateY(-1px);
+    }
+
+    .bk-btn:active {
+        transform: scale(.98);
+    }
+
+    .bk-btn-primary {
+        background: #F5D020;
+        color: #111827;
+        box-shadow: 0 10px 18px rgba(245, 208, 32, .25);
+    }
+
+    .bk-btn-primary:hover {
+        filter: brightness(.98);
+        transform: translateY(-1px);
     }
 
     /* ===== Popup Confirm ===== */
     .popup-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.35);
-        display: flex;
+        background: rgba(15, 23, 42, 0.55);
+        display: none;
         align-items: center;
         justify-content: center;
         z-index: 9999;
-        padding: 1rem;
+        backdrop-filter: blur(2px);
     }
 
     .popup-box {
-        background: #fff;
-        padding: 1.8rem 2.2rem;
-        border-radius: 16px;
-        text-align: center;
-        width: 360px;
-        max-width: 92vw;
-        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
-        border: 1px solid #e5e7eb;
+        width: min(440px, 92vw);
+        background: #ffffff;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        box-shadow: 0 22px 60px rgba(0, 0, 0, .25);
+        padding: 18px 18px 16px;
+        animation: popupShow .18s ease-out;
     }
 
-    .popup-icon-circle {
-        width: 72px;
-        height: 72px;
-        border-radius: 9999px;
-        border: 3px solid #7ED957;
+    @keyframes popupShow {
+        from {
+            transform: translateY(8px) scale(.98);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+    }
+
+    .popup-top {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .popup-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 16px;
+        background: rgba(34, 197, 94, .12);
+        color: var(--ok);
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 1.05rem auto;
+        font-size: 22px;
+        border: 1px solid rgba(34, 197, 94, .22);
+        flex: 0 0 auto;
     }
 
-    .popup-icon-circle i {
-        font-size: 2.2rem;
-        color: #7ED957;
+    .popup-title {
+        margin: 2px 0 0 0;
+        font-weight: 1000;
+        color: #0f172a;
+        font-size: 16px;
     }
 
     .popup-text {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #111827;
+        margin: 6px 0 0 0;
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+    .popup-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 14px;
     }
 
     .btn-cancel,
     .btn-confirm {
-        padding: 0.55rem 1.4rem;
-        border-radius: 10px;
-        font-size: 0.92rem;
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-weight: 900;
         cursor: pointer;
         border: none;
-        font-weight: 700;
+        min-width: 120px;
+        transition: .15s ease;
     }
 
     .btn-cancel {
-        background: #BDBDBD;
-        color: #111827;
+        padding: 10px 14px;
+        border-radius: 14px;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        font-weight: 1000;
+        cursor: pointer;
     }
 
     .btn-cancel:hover {
-        background: #a8a8a8;
+        background: #eaf0f7;
     }
 
     .btn-confirm {
-        background: #7ED957;
-        color: #ffffff;
+        padding: 10px 14px;
+        border-radius: 14px;
+        background: #22c55e;
+        border: 1px solid #16a34a;
+        color: #fff;
+        font-weight: 1000;
+        cursor: pointer;
     }
 
     .btn-confirm:hover {
-        background: #6CB94C;
+        filter: brightness(.95);
     }
 </style>
 
-{{-- ========== ส่วน HTML + Blade (เนื้อหา) ========== --}}
-@section('content')
-<div class="booking-wrapper">
+@php
+$roomName = $room->room_name ?? 'ห้องประชุม';
+@endphp
 
-    {{-- แถบแจ้งเตือนเมื่อกรอกไม่ครบ (ควบคุมด้วย JS) --}}
-    <div id="client-error-banner"
-        style="display:none; margin-bottom: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem;
-                background-color:#FEF2F2; color:#B91C1C; font-size:0.85rem;">
-        <strong>กรุณากรอกข้อมูลให้ครบถ้วน</strong>
+<div class="bk-wrapper">
+
+    <div id="client-error-banner" class="bk-banner">
+        <i class="bi bi-exclamation-triangle"></i>
+        กรุณากรอกข้อมูลให้ครบถ้วน
     </div>
 
-    {{-- แถบหัวข้อหน้า --}}
-    <div class="booking-header">
-        <div class="booking-header-left">
-            <div class="booking-header-icon">
-                <i class="bi bi-calendar2-plus" style="font-size: 1.25rem; color: #374151;"></i>
+    {{-- ===== HERO ===== --}}
+    <div class="bk-hero">
+        <div class="bk-hero-left">
+            <div class="bk-hero-icon"><i class="bi bi-calendar2-plus"></i></div>
+            <div>
+                <h1 class="bk-hero-title">จองห้องประชุม</h1>
+                <p class="bk-hero-sub">ระบุวัน เวลา และข้อมูลผู้ขอใช้ห้องให้ครบถ้วน</p>
             </div>
-            <h1 class="booking-header-title">จองห้องประชุม</h1>
         </div>
+        <a class="bk-back" href="{{ route('user_rooms') }}">
+            <i class="bi bi-arrow-left"></i> ย้อนกลับ
+        </a>
     </div>
 
     <form id="bookingForm" action="{{ route('booking.store') }}" method="POST">
         @csrf
 
-        {{-- กล่อง: ข้อมูลการใช้ห้อง --}}
-        <div class="card-box">
-            <div class="card-header">
-                ข้อมูลการใช้ห้อง
+        {{-- ===== Card: ข้อมูลการใช้ห้อง ===== --}}
+        <div class="bk-card">
+            <div class="bk-card-head">
+                <div class="bk-card-title">
+                    <i class="bi bi-clipboard-check"></i>
+                    ข้อมูลการใช้ห้อง
+                </div>
             </div>
-            <div class="card-body">
 
-                {{-- วันที่ / เวลา --}}
+            <div class="bk-card-body">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
-                        <label class="form-label">
-                            วันที่ใช้ห้อง
-                        </label>
-                        <input type="date"
+                        <label class="bk-label">วันที่ใช้ห้อง</label>
+                        <input
+                            type="date"
                             name="use_date"
                             min="{{ now()->toDateString() }}"
-                            class="form-input @error('use_date') input-error @enderror"
+                            class="bk-input @error('use_date') input-error @enderror"
                             value="{{ old('use_date') }}">
+                        @error('use_date') <div class="text-red-600 text-sm mt-1">{{ $message }}</div> @enderror
                     </div>
+
                     <div>
-                        <label class="form-label">
-                            เวลาเริ่ม
-                        </label>
-                        <input type="time"
+                        <label class="bk-label">เวลาเริ่ม</label>
+                        <input
+                            type="time"
                             name="start_time"
-                            class="form-input @error('start_time') input-error @enderror"
+                            class="bk-input @error('start_time') input-error @enderror"
                             value="{{ old('start_time') }}">
-
-                        @error('start_time')
-                        <div class="text-red-600 text-sm mt-1">
-                            {{ $message }}
-                        </div>
-                        @enderror
-
+                        @error('start_time') <div class="text-red-600 text-sm mt-1">{{ $message }}</div> @enderror
                     </div>
+
                     <div>
-                        <label class="form-label">
-                            เวลาสิ้นสุด
-                        </label>
-                        <input type="time"
+                        <label class="bk-label">เวลาสิ้นสุด</label>
+                        <input
+                            type="time"
                             name="end_time"
-                            class="form-input @error('end_time') input-error @enderror"
+                            class="bk-input @error('end_time') input-error @enderror"
                             value="{{ old('end_time') }}">
-
-                        @error('end_time')
-                        <div class="text-red-600 text-sm mt-1">
-                            {{ $message }}
-                        </div>
-                        @enderror
+                        @error('end_time') <div class="text-red-600 text-sm mt-1">{{ $message }}</div> @enderror
                     </div>
                 </div>
 
-                {{-- ห้องประชุม (ล็อกจากปุ่มจองห้องนี้) --}}
-                <div class="mb-4">
-                    <label class="form-label">ห้องประชุม</label>
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="bk-label">ห้องประชุม</label>
+                        <input type="hidden" name="room_id" value="{{ $room->room_id }}">
+                        <input type="text" class="bk-input bk-disabled" value="{{ $roomName }}" disabled>
+                    </div>
 
-                    {{-- ซ่อน room_id ไว้ส่งไป Controller --}}
-                    <input type="hidden" name="room_id" value="{{ $room->room_id }}">
-
-                    {{-- แสดงชื่อห้อง (แก้ไม่ได้) --}}
-                    <input type="text"
-                        class="form-input bg-gray-100"
-                        value="{{ $room->room_name }}"
-                        disabled>
-                </div>
-
-                {{-- หัวข้อการประชุม --}}
-                <div>
-                    <label class="form-label">
-                        หัวข้อการประชุม
-                    </label>
-                    <input type="text"
-                        name="meeting_topic"
-                        class="form-input @error('meeting_topic') input-error @enderror"
-                        value="{{ old('meeting_topic') }}"
-                        placeholder="ระบุหัวข้อการประชุม">
+                    <div>
+                        <label class="bk-label">หัวข้อการประชุม</label>
+                        <input
+                            type="text"
+                            name="meeting_topic"
+                            class="bk-input @error('meeting_topic') input-error @enderror"
+                            value="{{ old('meeting_topic') }}"
+                            placeholder="ระบุหัวข้อการประชุม">
+                        @error('meeting_topic')
+                        <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
             </div>
         </div>
 
-        {{-- กล่อง: ข้อมูลผู้ขอใช้ห้อง --}}
-        <div class="card-box">
-            <div class="card-header">
-                ข้อมูลผู้ขอใช้ห้อง
+        {{-- ===== Card: ข้อมูลผู้ขอใช้ห้อง ===== --}}
+        <div class="bk-card">
+            <div class="bk-card-head">
+                <div class="bk-card-title">
+                    <i class="bi bi-person-badge"></i>
+                    ข้อมูลผู้ขอใช้ห้อง
+                </div>
             </div>
-            <div class="card-body">
+
+            <div class="bk-card-body">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label class="form-label">
-                            กลุ่มงาน
-                        </label>
-
-                        <input type="hidden"
-                            name="department"
-                            value="{{ session('department_name') ?? '' }}">
-
-                        <input type="text"
-                            class="form-input bg-gray-100 @error('department') input-error @enderror"
+                        <label class="bk-label">กลุ่มงาน</label>
+                        <input type="hidden" name="department" value="{{ session('department_name') ?? '' }}">
+                        <input
+                            type="text"
+                            class="bk-input bk-disabled @error('department') input-error @enderror"
                             value="{{ session('department_name') ?? '-' }}"
                             disabled>
+                        @error('department') <div class="text-red-600 text-sm mt-1">{{ $message }}</div> @enderror
                     </div>
+
                     <div>
-                        <label class="form-label">
-                            เบอร์โทร
-                        </label>
-                        <input type="text"
+                        <label class="bk-label">เบอร์โทร</label>
+                        <input
+                            type="text"
                             name="phone"
-                            class="form-input @error('phone') input-error @enderror"
+                            class="bk-input @error('phone') input-error @enderror"
                             value="{{ old('phone', session('phone')) }}"
                             placeholder="เบอร์โทร">
-
+                        @error('phone') <div class="text-red-600 text-sm mt-1">{{ $message }}</div> @enderror
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="form-label">ชื่อ</label>
-                        <input type="text"
+                        <label class="bk-label">ชื่อ</label>
+                        <input
+                            type="text"
                             name="first_name"
-                            class="form-input @error('first_name') input-error @enderror"
+                            class="bk-input @error('first_name') input-error @enderror"
                             value="{{ old('first_name', session('first_name')) }}"
                             placeholder="ชื่อ">
-                        @error('first_name')
-                        @enderror
+                        @error('first_name') <div class="text-red-600 text-sm mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     <div>
-                        <label class="form-label">นามสกุล</label>
-                        <input type="text"
+                        <label class="bk-label">นามสกุล</label>
+                        <input
+                            type="text"
                             name="last_name"
-                            class="form-input @error('last_name') input-error @enderror"
+                            class="bk-input @error('last_name') input-error @enderror"
                             value="{{ old('last_name', session('last_name')) }}"
                             placeholder="นามสกุล">
-                        @error('last_name')
-                        @enderror
+                        @error('last_name') <div class="text-red-600 text-sm mt-1">{{ $message }}</div> @enderror
                     </div>
                 </div>
 
-
-
+                <div class="bk-actions">
+                    <button type="submit" class="bk-btn bk-btn-primary">
+                        <i class="bi bi-check2-circle"></i> ยืนยันการจอง
+                    </button>
+                </div>
             </div>
         </div>
 
-        {{-- ปุ่มจอง --}}
-        <div class="booking-actions">
-            <button type="submit" class="btn-submit-booking">
-                จอง
-            </button>
-        </div>
     </form>
 </div>
 
 {{-- ===== Popup Confirm ===== --}}
-<div id="confirmPopup" class="popup-overlay" style="display: none;">
+<div id="confirmPopup" class="popup-overlay">
     <div class="popup-box">
-        <div class="popup-icon-circle">
-            <i class="bi bi-question-lg"></i>
+        <div class="popup-top">
+            <div class="popup-icon"><i class="bi bi-check2-circle"></i></div>
+            <div>
+                <div class="popup-title">ต้องการยืนยันการจองห้องประชุมหรือไม่?</div>
+                <div class="popup-text">ตรวจสอบวันและเวลาก่อนกดยืนยัน</div>
+            </div>
         </div>
 
-        <div class="popup-text" style="margin-bottom: 1.2rem;">
-            ต้องการจองห้องประชุมหรือไม่?
-        </div>
-
-        <div style="display:flex; gap:1rem; justify-content:center;">
-            <button type="button" class="btn-cancel" onclick="closeConfirmPopup()">ยกเลิก</button>
-            <button type="button" class="btn-confirm" onclick="submitForm()">ตกลง</button>
+        <div class="popup-actions">
+            <button class="btn-cancel" type="button" onclick="closeConfirmPopup()">ยกเลิก</button>
+            <button class="btn-confirm" type="button" onclick="submitForm()">ตกลง</button>
         </div>
     </div>
 </div>
 
-{{-- ยืนยันก่อนบันทึก --}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('bookingForm');
@@ -420,7 +563,6 @@
         window.closeConfirmPopup = function() {
             popup.style.display = 'none';
         };
-
         window.submitForm = function() {
             popup.style.display = 'none';
             form.submit();
@@ -430,22 +572,15 @@
             e.preventDefault();
 
             const requiredFields = [
-                'use_date',
-                'start_time',
-                'end_time',
-                'meeting_topic',
-                'department', // hidden
-                'first_name',
-                'last_name',
-                'phone',
+                'use_date', 'start_time', 'end_time', 'meeting_topic',
+                'department', 'first_name', 'last_name', 'phone'
             ];
 
             let isValid = true;
 
-            requiredFields.forEach(function(field) {
+            requiredFields.forEach((field) => {
                 const input = form.querySelector(`[name="${field}"]`);
-                if (input && input.value.trim() === '') {
-                    // department เป็น hidden ใส่ class ก็ไม่เห็น แต่ยังตรวจได้
+                if (input && (input.value ?? '').trim() === '') {
                     input.classList.add('input-error');
                     isValid = false;
                 } else if (input) {
@@ -455,6 +590,11 @@
 
             if (!isValid) {
                 if (banner) banner.style.display = 'block';
+                // scroll ให้เห็น banner
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
                 return;
             }
 
@@ -463,4 +603,5 @@
         });
     });
 </script>
+
 @endsection
