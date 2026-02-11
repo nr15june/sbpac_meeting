@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 11, 2026 at 09:01 AM
+-- Generation Time: Feb 11, 2026 at 10:16 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admins` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL DEFAULT 'admin',
   `department_id` bigint(20) UNSIGNED DEFAULT NULL,
@@ -41,8 +41,8 @@ CREATE TABLE `admins` (
 -- Dumping data for table `admins`
 --
 
-INSERT INTO `admins` (`id`, `email`, `password`, `role`, `department_id`, `created_at`, `updated_at`) VALUES
-(1, 'admin@sbpac.go.th', '$2y$12$fFTqCBgNV2.Y1zv4wTmQeet69/LPvjv7ktLRO1/z0niPd5jZYBQJm', 'admin', 1, '2026-02-08 23:57:15', '2026-02-08 23:57:15');
+INSERT INTO `admins` (`id`, `username`, `password`, `role`, `department_id`, `created_at`, `updated_at`) VALUES
+(1, 'adminit', '$2y$12$l3jI3pnnDo9POgw9JrvHpOE6/fJSkCTpDXbL1sJ6T.snJXj1QrICS', 'admin', 1, '2026-02-11 02:13:38', '2026-02-11 02:13:38');
 
 -- --------------------------------------------------------
 
@@ -104,16 +104,6 @@ CREATE TABLE `departments` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `departments`
---
-
-INSERT INTO `departments` (`id`, `code`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'SBPAC-1', 'กลุ่มงานบริหารยุทธศาสตร์การพัฒนาจังหวัดชายแดนภาคใต้', '2026-02-08 23:57:21', '2026-02-08 23:57:21'),
-(2, 'SBPAC-2', 'กลุ่มงานบริหารงบประมาณ', '2026-02-08 23:57:21', '2026-02-08 23:57:21'),
-(3, 'SBPAC-3', 'กลุ่มงานอํานวยการและบริหาร', '2026-02-08 23:57:21', '2026-02-08 23:57:21'),
-(4, 'SBPAC-4', 'กลุ่มงานบริหารยุทธศาสตร์การสื่อสารสร้างความเข้าใจที่ดี', '2026-02-08 23:57:21', '2026-02-08 23:57:21');
-
 -- --------------------------------------------------------
 
 --
@@ -123,8 +113,7 @@ INSERT INTO `departments` (`id`, `code`, `name`, `created_at`, `updated_at`) VAL
 CREATE TABLE `employees` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `card_id` varchar(13) NOT NULL,
-  `username` varchar(50) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
@@ -133,13 +122,6 @@ CREATE TABLE `employees` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `employees`
---
-
-INSERT INTO `employees` (`id`, `card_id`, `username`, `email`, `password`, `first_name`, `last_name`, `phone`, `department_id`, `created_at`, `updated_at`) VALUES
-(7, '123456789', 'abc', NULL, '$2y$12$yQEJPXED3WkXV77U/WQr.Omi1XTQ.QvBjIs//PufLXgAfZlBkHdOW', 'abc', 'def', '074444444', 4, '2026-02-09 20:11:34', '2026-02-09 20:11:34');
 
 -- --------------------------------------------------------
 
@@ -222,7 +204,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (11, '2025_12_16_081337_add_email_password_to_employees_table', 1),
 (12, '2025_12_18_041840_update_bookings_add_user_id_and_nullable_email', 1),
 (13, '2025_12_18_044904_drop_user_id_from_bookings_table', 1),
-(14, '2025_12_18_045234_add_employee_id_to_bookings_table', 1);
+(14, '2025_12_18_045234_add_employee_id_to_bookings_table', 1),
+(15, '2026_02_11_090404_add_username_to_admins_table', 1);
 
 -- --------------------------------------------------------
 
@@ -253,13 +236,6 @@ CREATE TABLE `rooms` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `rooms`
---
-
-INSERT INTO `rooms` (`room_id`, `room_name`, `building`, `quantity`, `description`, `room_image`, `created_at`, `updated_at`) VALUES
-(1, 'ห้องประชุม 1', 'กบย', 5, 'ไม่มี', 'rooms/I2iTWAPfQugyF8l1v76NNwNDbnkhQjhJCyWmVrmR.jpg', '2026-02-09 19:04:49', '2026-02-09 19:04:49');
-
 -- --------------------------------------------------------
 
 --
@@ -280,10 +256,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('1Hnxj9GnGnuE3u4aZe4BP1gtIpIq3yKA6qefYwcV', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0', 'YToxMTp7czo2OiJfdG9rZW4iO3M6NDA6IlVQbkZWQ0Q2eXZCQW1HdUhEOXRtU052ekNYdldnaU1QaTVISFNzbkciO3M6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjQyOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvdXNlci9oaXN0b3J5X2Jvb2tpbmciO3M6NToicm91dGUiO3M6MjA6InVzZXJfaGlzdG9yeV9ib29raW5nIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxNDoidXNlcl9sb2dnZWRfaW4iO2I6MTtzOjExOiJlbXBsb3llZV9pZCI7aTo2O3M6OToidXNlcl9uYW1lIjtzOjg6ImFldyBhamV0IjtzOjEwOiJmaXJzdF9uYW1lIjtzOjM6ImFldyI7czo5OiJsYXN0X25hbWUiO3M6NDoiYWpldCI7czo1OiJwaG9uZSI7czo5OiIwNzMyNzQxMTIiO3M6MTM6ImRlcGFydG1lbnRfaWQiO2k6MTtzOjE1OiJkZXBhcnRtZW50X25hbWUiO3M6MTUzOiLguIHguKXguLjguYjguKHguIfguLLguJnguJrguKPguLTguKvguLLguKPguKLguLjguJfguJjguKjguLLguKrguJXguKPguYzguIHguLLguKPguJ7guLHguJLguJnguLLguIjguLHguIfguKvguKfguLHguJTguIrguLLguKLguYHguJTguJnguKDguLLguITguYPguJXguYkiO30=', 1770689152),
-('Lk5vX3k6S3dysbq3gysU26Mwoe3b0boA3YT4Id3u', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiVk5USFhsUzRHbmg2SUtwdzZvZEVvNUI0NmdHYVkzQkFHd0xQOEhLayI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC91c2VyL2NhbGVuZGFyIjtzOjU6InJvdXRlIjtzOjEzOiJ1c2VyX2NhbGVuZGFyIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1770796851),
-('TkrnP8EHVIRKORmy9yOodWstnUgM7oMO4yLpcFQa', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiSDh2dDlyelZsYkRxcW9JU1dxVlBPblFuSnhLTmJUTHlpQzFXSEpvRSI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9lbXBsb3llZXMiO3M6NToicm91dGUiO3M6MTU6ImFkbWluX2VtcGxveWVlcyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6MTU6ImFkbWluX2xvZ2dlZF9pbiI7YjoxO3M6ODoiYWRtaW5faWQiO2k6MTtzOjE5OiJhZG1pbl9kZXBhcnRtZW50X2lkIjtpOjE7fQ==', 1770693222),
-('UQcqozY9KIdUncyqpANUUEk2HMg7P1FDwFyfVskj', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiNEtVTDNESWZSSjZZSWc1M3kxVjdkT0lWQk13RXlKZG5RZExGWmtWZSI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDQ6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9lbXBsb3llZXMvY3JlYXRlIjtzOjU6InJvdXRlIjtzOjIyOiJhZG1pbl9jcmVhdGVfZW1wbG95ZWVzIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxNToiYWRtaW5fbG9nZ2VkX2luIjtiOjE7czo4OiJhZG1pbl9pZCI7aToxO3M6MTk6ImFkbWluX2RlcGFydG1lbnRfaWQiO2k6MTt9', 1770689985);
+('1r0dz3q0pxBaIgStMJPHkIzB3j9KhJctbLuyzF3l', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiQTBCUXlPc0l6YUp0RlhCMzV6RXFlaHZqVmpPMVJ1VldldFp2ZmdjcyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDQ6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9lbXBsb3llZXMvY3JlYXRlIjtzOjU6InJvdXRlIjtzOjIyOiJhZG1pbl9jcmVhdGVfZW1wbG95ZWVzIjt9czoxNToiYWRtaW5fbG9nZ2VkX2luIjtiOjE7czo4OiJhZG1pbl9pZCI7aToxO3M6MTk6ImFkbWluX2RlcGFydG1lbnRfaWQiO2k6MTt9', 1770801290);
 
 -- --------------------------------------------------------
 
@@ -303,6 +276,13 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Test User', 'test@example.com', '2026-02-11 02:12:31', '$2y$12$.pi4HKssb2hefUx9YRWnSe.cIqF1cvzpiSrnH.zLcX9rr1XOU6TgC', 'kgVWDEjCHq', '2026-02-11 02:12:31', '2026-02-11 02:12:31');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -311,7 +291,7 @@ CREATE TABLE `users` (
 --
 ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `admins_email_unique` (`email`);
+  ADD UNIQUE KEY `admins_username_unique` (`username`);
 
 --
 -- Indexes for table `bookings`
@@ -345,8 +325,7 @@ ALTER TABLE `departments`
 ALTER TABLE `employees`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `employees_card_id_unique` (`card_id`),
-  ADD UNIQUE KEY `employees_email_unique` (`email`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD UNIQUE KEY `employees_email_unique` (`email`);
 
 --
 -- Indexes for table `failed_jobs`
@@ -415,19 +394,19 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `booking_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -445,19 +424,19 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `room_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `room_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
