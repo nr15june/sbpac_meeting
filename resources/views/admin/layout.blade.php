@@ -12,13 +12,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
-        <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     @endif
 
     <style>
-        body { font-family: 'Sarabun', sans-serif; }
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
     </style>
 </head>
 
@@ -53,7 +55,7 @@
 
                 <nav class="text-sm">
                     <a href="{{ route('admin_calendar') }}"
-                       class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
+                        class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-house-door-fill mr-2 text-white"></i>
                         <span>ปฏิทินการใช้ห้อง</span>
                     </a>
@@ -66,19 +68,19 @@
 
                 <nav class="text-sm">
                     <a href="{{ route('admin_employees') }}"
-                       class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
+                        class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-people-fill mr-2 text-white"></i>
                         <span>จัดการข้อมูลพนักงาน</span>
                     </a>
 
                     <a href="{{ route('admin_meetingrooms') }}"
-                       class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
+                        class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-calendar2-event mr-2 text-white"></i>
                         <span>ห้องประชุม</span>
                     </a>
 
                     <a href="{{ route('admin_history_booking') }}"
-                       class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
+                        class="flex items-center px-4 py-2.5 border-b border-gray-600 hover:bg-gray-600">
                         <i class="bi bi-clock-history mr-2 text-white"></i>
                         <span>ประวัติการจอง</span>
                     </a>
@@ -98,8 +100,9 @@
                                     {{ $adminName ?? 'Admin' }}
                                 </div>
                                 <div class="text-xs text-gray-300">
-                                    {{ $deptName ?? 'ไม่พบกลุ่มงาน' }}
+                                    {{ config('organization.division_name') }}
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -129,4 +132,5 @@
     </div>
 
 </body>
+
 </html>

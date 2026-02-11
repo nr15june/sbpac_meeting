@@ -333,6 +333,35 @@
     .btn-confirm:hover {
         filter: brightness(.95);
     }
+
+    .input-wrap {
+        position: relative;
+    }
+
+    .input-wrap .form-input {
+        padding-right: 46px;
+    }
+
+    .toggle-eye {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #64748b;
+    }
+
+    input[type="password"] {
+        background-image: none !important;
+    }
 </style>
 
 <div class="create-emp-wrapper">
@@ -364,16 +393,30 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label"><i class="bi bi-diagram-3"></i> กลุ่มงาน</label>
-                        <input type="text" class="form-input" value="{{ $departmentName ?? '-' }}" readonly>
-                        <input type="hidden" name="department_id" value="{{ $departmentId ?? '' }}">
-                        @error('department_id') <div class="error-msg">{{ $message }}</div> @enderror
+                        <label class="form-label">
+                            <i class="bi bi-diagram-3"></i> กลุ่มงาน
+                        </label>
+
+                        <select name="department_id" class="form-input">
+                            <option value="">-- เลือกกลุ่มงาน --</option>
+                            @foreach ($departments as $dept)
+                            <option value="{{ $dept->id }}"
+                                {{ old('department_id') == $dept->id ? 'selected' : '' }}>
+                                {{ $dept->name }}
+                            </option>
+                            @endforeach
+                        </select>
+
+                        @error('department_id')
+                        <div class="error-msg">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="form-group">
                         <label class="form-label"><i class="bi bi-credit-card-2-front"></i> เลขบัตรประชาชน</label>
-                        <input type="text" name="card_id" maxlength="13"
-                            class="form-input" placeholder="13 หลัก"
+                        <input type="text" name="card_id"
+                            class="form-input"
+                            placeholder="เลขบัตรประชาชน "
                             value="{{ old('card_id') }}">
                         @error('card_id') <div class="error-msg">{{ $message }}</div> @enderror
                     </div>
@@ -414,15 +457,27 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label"><i class="bi bi-key"></i> รหัสผ่าน</label>
-                        <input type="password" name="password" class="form-input"
-                            placeholder="รหัสผ่าน">
+                        <div class="input-wrap">
+                            <input id="pw" type="password" name="password"
+                                class="form-input"
+                                placeholder="รหัสผ่าน">
+                            <button type="button" class="toggle-eye" onclick="togglePw('pw', this)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                         @error('password') <div class="error-msg">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="form-group">
                         <label class="form-label"><i class="bi bi-shield-lock"></i> ยืนยันรหัสผ่าน</label>
-                        <input type="password" name="password_confirmation"
-                            class="form-input" placeholder="ยืนยันรหัสผ่าน">
+                        <div class="input-wrap">
+                            <input id="pw2" type="password" name="password_confirmation"
+                                class="form-input"
+                                placeholder="ยืนยันรหัสผ่าน">
+                            <button type="button" class="toggle-eye" onclick="togglePw('pw2', this)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -473,6 +528,18 @@
     document.getElementById('confirmPopup').addEventListener('click', function(e) {
         if (e.target === this) closeConfirmPopup();
     });
+
+    function togglePw(id, btn) {
+        const el = document.getElementById(id);
+        const icon = btn.querySelector('i');
+        if (el.type === 'password') {
+            el.type = 'text';
+            icon.className = 'bi bi-eye-slash';
+        } else {
+            el.type = 'password';
+            icon.className = 'bi bi-eye';
+        }
+    }
 </script>
 
 @endsection

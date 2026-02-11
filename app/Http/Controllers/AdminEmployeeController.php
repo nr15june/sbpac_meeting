@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\Admin;
 use App\Models\Department;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AdminEmployeeController extends Controller
 {
@@ -22,7 +23,7 @@ class AdminEmployeeController extends Controller
         $q = trim($request->get('q'));
 
         $employees = Employee::with('department')
-            ->where('department_id', $admin->department_id)
+            //->where('department_id', $admin->department_id)
             ->when($q, function ($query) use ($q) {
                 $query->where(function ($sub) use ($q) {
                     $sub->where('card_id', 'like', "%{$q}%")
@@ -49,16 +50,11 @@ class AdminEmployeeController extends Controller
             return redirect()->route('admin.login');
         }
 
-        $admin = Admin::findOrFail(session('admin_id'));
-
-        $dept = Department::find($admin->department_id);
-
-        $departmentId = $admin->department_id;
-        $departmentName = $dept?->name; 
-
-        return view('admin.create_employees', compact('departmentId', 'departmentName'));
+        $departments = Department::all();
+        return view('admin.create_employees', compact('departments'));
     }
-    
+
+
     public function store(Request $request)
     {
         if (!session('admin_logged_in')) {
@@ -68,22 +64,40 @@ class AdminEmployeeController extends Controller
         $admin = Admin::findOrFail(session('admin_id'));
 
         $request->validate([
-            'card_id' => 'required|digits:13|unique:employees,card_id',
-            'email'      => 'required|email|unique:employees,email',
+            'department_id' => 'required|exists:departments,id',
+            'card_id' => 'required|string|max:50|unique:employees,card_id',
+            'email' => 'nullable|email|unique:employees,email',
             'password'   => 'required|min:6|confirmed',
             'first_name' => 'required|string|max:255',
             'last_name'  => 'required|string|max:255',
             'phone'      => 'nullable|string|max:20',
         ]);
 
+        $baseUsername = Str::lower(Str::slug($request->first_name, ''));
+
+        // กรณีชื่อภาษาไทย slug จะว่าง
+        if ($baseUsername === '') {
+            $baseUsername = Str::lower($request->first_name);
+        }
+
+        $username = $baseUsername;
+        $counter = 1;
+
+        // 🔹 กัน username ซ้ำ
+        while (Employee::where('username', $username)->exists()) {
+            $username = $baseUsername . $counter;
+            $counter++;
+        }
+
         Employee::create([
             'card_id'    => $request->card_id,
+            'username'      => $username,
             'email'         => $request->email,
             'password'      => Hash::make($request->password),
             'first_name'    => $request->first_name,
             'last_name'     => $request->last_name,
             'phone'         => $request->phone,
-            'department_id' => $admin->department_id,
+            'department_id' => $request->department_id,
         ]);
 
         return redirect()
@@ -98,8 +112,9 @@ class AdminEmployeeController extends Controller
         }
 
         $employee = Employee::findOrFail($id);
+        $departments = Department::all(); 
 
-        return view('admin.edit_employees', compact('employee'));
+        return view('admin.edit_employees', compact('employee', 'departments'));
     }
 
     public function update(Request $request, $id)
@@ -111,14 +126,16 @@ class AdminEmployeeController extends Controller
         $employee = Employee::findOrFail($id);
 
         $request->validate([
-            'card_id' => 'required|digits:13|unique:employees,card_id,' . $employee->id,
-            'email'      => 'required|email|unique:employees,email,' . $employee->id,
+            'department_id' => 'required|exists:departments,id',
+            'card_id' => 'required|string|max:50|unique:employees,card_id,' . $employee->id,
+            'email'   => 'nullable|email|unique:employees,email,' . $employee->id,
             'first_name' => 'required|string|max:255',
             'last_name'  => 'required|string|max:255',
             'phone'      => 'nullable|string|max:20',
         ]);
 
         $employee->update([
+            'department_id' => $request->department_id,
             'card_id' => $request->card_id,
             'email'      => $request->email,
             'first_name' => $request->first_name,

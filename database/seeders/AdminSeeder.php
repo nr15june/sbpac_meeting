@@ -11,10 +11,8 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         $admins = [
-            ['email' => 'admin1@sbpac.go.th', 'password' => Hash::make('123456'), 'role' => 'admin', 'department_id' => 1],
-            ['email' => 'admin2@sbpac.go.th', 'password' => Hash::make('123456'), 'role' => 'admin', 'department_id' => 2],
-            ['email' => 'admin3@sbpac.go.th', 'password' => Hash::make('123456'), 'role' => 'admin', 'department_id' => 3],
-            ['email' => 'admin4@sbpac.go.th', 'password' => Hash::make('123456'), 'role' => 'admin', 'department_id' => 4],
+            ['email' => 'admin@sbpac.go.th', 'password' => Hash::make('123456'), 'role' => 'admin', 'department_id' => 1],
+            
         ];
 
         foreach ($admins as $admin) {

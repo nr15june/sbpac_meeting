@@ -17,17 +17,18 @@ class UserAuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'    => 'required|email',
+            'username' => 'required|string',
             'password' => 'required',
         ]);
 
-        $email = strtolower(trim($request->email));
+        $username = trim($request->username);
 
-        $employee = Employee::whereRaw('LOWER(email) = ?', [$email])->first();
+        $employee = Employee::where('username', $username)->first();
 
         if (!$employee || !Hash::check($request->password, $employee->password)) {
-            return back()->with('error', 'อีเมลหรือรหัสผ่านไม่ถูกต้อง')->withInput();
+            return back()->with('error', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง')->withInput();
         }
+
 
         $department = Department::find($employee->department_id);
 

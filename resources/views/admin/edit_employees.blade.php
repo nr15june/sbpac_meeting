@@ -431,10 +431,21 @@
 
                 <div class="form-row">
                     <div>
-                        <label class="form-label"><i class="bi bi-diagram-3"></i> กลุ่มงาน</label>
-                        <input type="text" class="form-input"
-                            value="{{ optional($employee->department)->name ?? ($departmentName ?? '-') }}"
-                            readonly>
+                        <label class="form-label">
+                            <i class="bi bi-diagram-3"></i> กลุ่มงาน
+                        </label>
+                        <select name="department_id" class="form-input">
+                            @foreach ($departments as $dept)
+                            <option value="{{ $dept->id }}"
+                                {{ old('department_id', $employee->department_id) == $dept->id ? 'selected' : '' }}>
+                                {{ $dept->name }}
+                            </option>
+                            @endforeach
+                        </select>
+
+                        @error('department_id')
+                        <div class="error-msg">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div>
@@ -483,7 +494,7 @@
                 </div>
 
                 <div class="form-row">
-                    <div>
+                    <div class="form-group">
                         <label class="form-label"><i class="bi bi-key"></i> รหัสผ่านใหม่</label>
                         <div class="input-wrap">
                             <input id="pw" type="password" name="password"

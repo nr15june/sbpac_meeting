@@ -185,9 +185,10 @@
             @csrf
 
             <div class="form-group">
-                <div class="form-label">อีเมล</div>
-                <input type="email" name="email" class="form-control"
-                    placeholder="email" value="{{ old('email') }}" required autocomplete="username">
+                <div class="form-label">ชื่อผู้ใช้</div>
+                <input type="text" name="username" class="form-control"
+                    placeholder="username" value="{{ old('username') }}" required>
+
             </div>
 
             <div class="form-group">
