@@ -11,13 +11,17 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         $admins = [
-            ['email' => 'admin@sbpac.go.th', 'password' => Hash::make('123456'), 'role' => 'admin', 'department_id' => 1],
-            
+            [
+                'username' => 'adminit',
+                'password' => Hash::make('123456'),
+                'role' => 'admin',
+                'department_id' => 1
+            ],
         ];
 
         foreach ($admins as $admin) {
             Admin::updateOrCreate(
-                ['email' => $admin['email']],
+                ['username' => $admin['username']],
                 [
                     'password' => $admin['password'],
                     'role' => $admin['role'],

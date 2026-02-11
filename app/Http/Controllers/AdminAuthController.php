@@ -16,11 +16,11 @@ class AdminAuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'    => 'required|email',
+            'username' => 'required|string',
             'password' => 'required',
         ]);
 
-        $admin = Admin::where('email', $request->email)->first();
+        $admin = Admin::where('username', $request->username)->first();
 
         if (!$admin || !Hash::check($request->password, $admin->password)) {
             return back()->with('error', 'อีเมลหรือรหัสผ่านไม่ถูกต้อง')->withInput();

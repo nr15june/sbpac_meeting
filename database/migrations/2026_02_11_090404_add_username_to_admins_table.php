@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('employees', function (Blueprint $table) {
-            $table->renameColumn('citizen_id', 'card_id');
-        });
+        Schema::table('admins', function (Blueprint $table) {
+        $table->string('username')->unique()->after('id');
+        $table->dropColumn('email');
+    });
     }
 
     /**
@@ -21,8 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('employees', function (Blueprint $table) {
-           $table->renameColumn('card_id', 'citizen_id');
-        });
+        Schema::table('admins', function (Blueprint $table) {
+        $table->string('email')->nullable();
+        $table->dropColumn('username');
+    });
     }
 };

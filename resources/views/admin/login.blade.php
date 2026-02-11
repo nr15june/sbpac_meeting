@@ -165,12 +165,12 @@
             @csrf
 
             <div class="form-group">
-                <div class="form-label">Email</div>
-                <input type="email"
-                    name="email"
+                <div class="form-label">Username</div>
+                <input type="text"
+                    name="username"
                     class="form-control"
-                    placeholder="email"
-                    value="{{ old('email') }}"
+                    placeholder="username"
+                    value="{{ old('username') }}"
                     required>
             </div>
 
