@@ -65,7 +65,7 @@ class AdminEmployeeController extends Controller
 
         $request->validate([
             'department_id' => 'required|exists:departments,id',
-            'card_id' => 'required|string|max:50|unique:employees,card_id',
+            'card_id' => 'required|unique:employees,card_id',
             'email' => 'nullable|email|unique:employees,email',
             'password'   => 'required|min:6|confirmed',
             'first_name' => 'required|string|max:255',
@@ -127,7 +127,7 @@ class AdminEmployeeController extends Controller
 
         $request->validate([
             'department_id' => 'required|exists:departments,id',
-            'card_id' => 'required|string|max:50|unique:employees,card_id,' . $employee->id,
+            'card_id' => 'required|unique:employees,card_id,' . $employee->id,
             'email'   => 'nullable|email|unique:employees,email,' . $employee->id,
             'first_name' => 'required|string|max:255',
             'last_name'  => 'required|string|max:255',

@@ -461,9 +461,6 @@
                             <input id="pw" type="password" name="password"
                                 class="form-input"
                                 placeholder="รหัสผ่าน">
-                            <button type="button" class="toggle-eye" onclick="togglePw('pw', this)">
-                                <i class="bi bi-eye"></i>
-                            </button>
                         </div>
                         @error('password') <div class="error-msg">{{ $message }}</div> @enderror
                     </div>
@@ -474,9 +471,6 @@
                             <input id="pw2" type="password" name="password_confirmation"
                                 class="form-input"
                                 placeholder="ยืนยันรหัสผ่าน">
-                            <button type="button" class="toggle-eye" onclick="togglePw('pw2', this)">
-                                <i class="bi bi-eye"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
