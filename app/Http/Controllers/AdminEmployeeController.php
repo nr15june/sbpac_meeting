@@ -65,38 +65,32 @@ class AdminEmployeeController extends Controller
 
         $request->validate([
             'department_id' => 'required|exists:departments,id',
-            'card_id' => 'required|unique:employees,card_id',
+
+            'card_id' => [
+                'required',
+                'digits:13',
+                'unique:employees,card_id',
+            ],
+
             'email' => 'nullable|email|unique:employees,email',
             'password'   => 'required|min:6|confirmed',
             'first_name' => 'required|string|max:255',
             'last_name'  => 'required|string|max:255',
             'phone'      => 'nullable|string|max:20',
+        ], [
+            'card_id.required' => 'กรุณากรอกเลขบัตรประชาชน',
+            'card_id.digits'   => 'เลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก',
+            'card_id.unique'   => 'เลขบัตรประชาชนนี้มีอยู่ในระบบแล้ว',
         ]);
-
-        $baseUsername = Str::lower(Str::slug($request->first_name, ''));
-
-        // กรณีชื่อภาษาไทย slug จะว่าง
-        if ($baseUsername === '') {
-            $baseUsername = Str::lower($request->first_name);
-        }
-
-        $username = $baseUsername;
-        $counter = 1;
-
-        // 🔹 กัน username ซ้ำ
-        while (Employee::where('username', $username)->exists()) {
-            $username = $baseUsername . $counter;
-            $counter++;
-        }
 
         Employee::create([
             'card_id'    => $request->card_id,
-            'username'      => $username,
-            'email'         => $request->email,
-            'password'      => Hash::make($request->password),
-            'first_name'    => $request->first_name,
-            'last_name'     => $request->last_name,
-            'phone'         => $request->phone,
+            'username'   => $request->card_id, // 👈 ใช้เลขบัตรเป็น username
+            'email'      => $request->email,
+            'password'   => Hash::make($request->password),
+            'first_name' => $request->first_name,
+            'last_name'  => $request->last_name,
+            'phone'      => $request->phone,
             'department_id' => $request->department_id,
         ]);
 
@@ -112,7 +106,7 @@ class AdminEmployeeController extends Controller
         }
 
         $employee = Employee::findOrFail($id);
-        $departments = Department::all(); 
+        $departments = Department::all();
 
         return view('admin.edit_employees', compact('employee', 'departments'));
     }
@@ -127,7 +121,13 @@ class AdminEmployeeController extends Controller
 
         $request->validate([
             'department_id' => 'required|exists:departments,id',
-            'card_id' => 'required|unique:employees,card_id,' . $employee->id,
+
+            'card_id' => [
+                'required',
+                'digits:13',
+                'unique:employees,card_id,' . $employee->id,
+            ],
+
             'email'   => 'nullable|email|unique:employees,email,' . $employee->id,
             'first_name' => 'required|string|max:255',
             'last_name'  => 'required|string|max:255',
@@ -136,12 +136,14 @@ class AdminEmployeeController extends Controller
 
         $employee->update([
             'department_id' => $request->department_id,
-            'card_id' => $request->card_id,
-            'email'      => $request->email,
-            'first_name' => $request->first_name,
-            'last_name'  => $request->last_name,
-            'phone'      => $request->phone,
+            'card_id'       => $request->card_id,
+            'username'      => $request->card_id, // 👈 sync ตลอด
+            'email'         => $request->email,
+            'first_name'    => $request->first_name,
+            'last_name'     => $request->last_name,
+            'phone'         => $request->phone,
         ]);
+
 
         return redirect()
             ->route('admin_employees')
