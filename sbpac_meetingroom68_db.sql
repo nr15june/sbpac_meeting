@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 11, 2026 at 10:16 AM
+-- Generation Time: Feb 13, 2026 at 05:48 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -66,6 +66,13 @@ CREATE TABLE `bookings` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `bookings`
+--
+
+INSERT INTO `bookings` (`booking_id`, `name`, `lastname`, `phone`, `email`, `department`, `meeting_topic`, `start_time`, `end_time`, `room_id`, `employee_id`, `created_at`, `updated_at`) VALUES
+(1, 'yuttasat', 'sbpac', '073203740', NULL, 'กลุ่มงานบริหารยุทธศาสตร์การพัฒนาจังหวัดชายแดนภาคใต้', 'หัวข้อการประชุม', '2026-02-16 10:30:00', '2026-02-16 11:00:00', 1, NULL, '2026-02-12 18:46:55', '2026-02-12 18:46:55');
+
 -- --------------------------------------------------------
 
 --
@@ -104,6 +111,16 @@ CREATE TABLE `departments` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `departments`
+--
+
+INSERT INTO `departments` (`id`, `code`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'SBPAC-1', 'กลุ่มงานบริหารยุทธศาสตร์การพัฒนาจังหวัดชายแดนภาคใต้', '2026-02-11 19:14:58', '2026-02-11 19:14:58'),
+(2, 'SBPAC-2', 'กลุ่มงานบริหารงบประมาณ', '2026-02-11 19:14:58', '2026-02-11 19:14:58'),
+(3, 'SBPAC-3', 'กลุ่มงานอํานวยการและบริหาร', '2026-02-11 19:14:58', '2026-02-11 19:14:58'),
+(4, 'SBPAC-4', 'กลุ่มงานบริหารยุทธศาสตร์การสื่อสารสร้างความเข้าใจที่ดี', '2026-02-11 19:14:58', '2026-02-11 19:14:58');
+
 -- --------------------------------------------------------
 
 --
@@ -113,7 +130,8 @@ CREATE TABLE `departments` (
 CREATE TABLE `employees` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `card_id` varchar(13) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
@@ -122,6 +140,14 @@ CREATE TABLE `employees` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `employees`
+--
+
+INSERT INTO `employees` (`id`, `card_id`, `username`, `email`, `password`, `first_name`, `last_name`, `phone`, `department_id`, `created_at`, `updated_at`) VALUES
+(3, '1987456321523', '1987456321523', NULL, '$2y$12$D3iFGSd2egvq9rHU2V3wmOqO8KDOPt8hU5ydpW7.Cq14m/KSB3OJG', 'นูรี', 'เจะลง', '073203740', 1, '2026-02-12 21:42:47', '2026-02-12 21:45:25'),
+(4, '1987456321545', '1987456321545', NULL, '$2y$12$.BqGrTK2rHRnaBqMUmhGROCyrO5sQ/aF57uz5OFavcf3CGkm/N/p.', 'ฮานัน', 'สาเระ', '073274112', 2, '2026-02-12 21:46:16', '2026-02-12 21:46:16');
 
 -- --------------------------------------------------------
 
@@ -205,7 +231,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (12, '2025_12_18_041840_update_bookings_add_user_id_and_nullable_email', 1),
 (13, '2025_12_18_044904_drop_user_id_from_bookings_table', 1),
 (14, '2025_12_18_045234_add_employee_id_to_bookings_table', 1),
-(15, '2026_02_11_090404_add_username_to_admins_table', 1);
+(15, '2026_02_11_090404_add_username_to_admins_table', 1),
+(16, '2026_02_12_042105_make_email_nullable_on_employees', 2),
+(17, '2026_02_12_043634_add_username_to_employees_table', 3);
 
 -- --------------------------------------------------------
 
@@ -236,6 +264,13 @@ CREATE TABLE `rooms` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `rooms`
+--
+
+INSERT INTO `rooms` (`room_id`, `room_name`, `building`, `quantity`, `description`, `room_image`, `created_at`, `updated_at`) VALUES
+(1, 'ห้องประชุม', 'กบย', 5, NULL, 'rooms/k3zBqAJueE496lgfdCazxNa0LCcW7Efqb7doIkbh.jpg', '2026-02-11 21:38:28', '2026-02-11 21:38:28');
+
 -- --------------------------------------------------------
 
 --
@@ -256,7 +291,10 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('1r0dz3q0pxBaIgStMJPHkIzB3j9KhJctbLuyzF3l', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiQTBCUXlPc0l6YUp0RlhCMzV6RXFlaHZqVmpPMVJ1VldldFp2ZmdjcyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDQ6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9lbXBsb3llZXMvY3JlYXRlIjtzOjU6InJvdXRlIjtzOjIyOiJhZG1pbl9jcmVhdGVfZW1wbG95ZWVzIjt9czoxNToiYWRtaW5fbG9nZ2VkX2luIjtiOjE7czo4OiJhZG1pbl9pZCI7aToxO3M6MTk6ImFkbWluX2RlcGFydG1lbnRfaWQiO2k6MTt9', 1770801290);
+('jzulSLLj1TdjW9OWTXTNJROzocN4W7OgIWxk3GSi', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0', 'YToxNDp7czo2OiJfdG9rZW4iO3M6NDA6InF2N0RDYnd2N05uQ2ZhOU9pd2ZDSFg3azQ3eDM2WEREMnA5UnEwUVoiO3M6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjM4OiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvY3JlYXRlX2Jvb2tpbmcvMSI7czo1OiJyb3V0ZSI7czoxNDoiY3JlYXRlX2Jvb2tpbmciO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjE1OiJhZG1pbl9sb2dnZWRfaW4iO2I6MTtzOjg6ImFkbWluX2lkIjtpOjE7czoxOToiYWRtaW5fZGVwYXJ0bWVudF9pZCI7aToxO3M6MTQ6InVzZXJfbG9nZ2VkX2luIjtiOjE7czoxMToiZW1wbG95ZWVfaWQiO2k6MTtzOjk6InVzZXJfbmFtZSI7czoxMDoibmFtd2FuIHdhbiI7czoxMDoiZmlyc3RfbmFtZSI7czo2OiJuYW13YW4iO3M6OToibGFzdF9uYW1lIjtzOjM6IndhbiI7czo1OiJwaG9uZSI7czoxMDoiMDY1OTg2NDU4OSI7czoxMzoiZGVwYXJ0bWVudF9pZCI7aTozO3M6MTU6ImRlcGFydG1lbnRfbmFtZSI7czo3ODoi4LiB4Lil4Li44LmI4Lih4LiH4Liy4LiZ4Lit4LmN4Liy4LiZ4Lin4Lii4LiB4Liy4Lij4LmB4Lil4Liw4Lia4Lij4Li04Lir4Liy4LijIjt9', 1770871158),
+('lBBFFQbItnyhHKNAYHK9sAevWnfaJhgCVrw9hROa', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiVDRlazB3cVp4eWRVTTkweDk4VmFWZzJLa1BSYzFWQUpDOWRNMTBHSCI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDM6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9oaXN0b3J5X2Jvb2tpbmciO3M6NToicm91dGUiO3M6MjE6ImFkbWluX2hpc3RvcnlfYm9va2luZyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6MTU6ImFkbWluX2xvZ2dlZF9pbiI7YjoxO3M6ODoiYWRtaW5faWQiO2k6MTtzOjE5OiJhZG1pbl9kZXBhcnRtZW50X2lkIjtpOjE7fQ==', 1770947254),
+('o5quuaYM9Fxp4EJFChLnMpZ3LYKVqElyT3lpF2eQ', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0', 'YToxMTp7czo2OiJfdG9rZW4iO3M6NDA6IklENVJTaVRkMm8ydk43ZlNoV2I0RFJuOEJZdTNCano2cFFLeVhNZjEiO3M6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjQyOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvdXNlci9oaXN0b3J5X2Jvb2tpbmciO3M6NToicm91dGUiO3M6MjA6InVzZXJfaGlzdG9yeV9ib29raW5nIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxNDoidXNlcl9sb2dnZWRfaW4iO2I6MTtzOjExOiJlbXBsb3llZV9pZCI7aToyO3M6OToidXNlcl9uYW1lIjtzOjE0OiJ5dXR0YXNhdCBzYnBhYyI7czoxMDoiZmlyc3RfbmFtZSI7czo4OiJ5dXR0YXNhdCI7czo5OiJsYXN0X25hbWUiO3M6NToic2JwYWMiO3M6NToicGhvbmUiO3M6OToiMDczMjAzNzQwIjtzOjEzOiJkZXBhcnRtZW50X2lkIjtpOjE7czoxNToiZGVwYXJ0bWVudF9uYW1lIjtzOjE1Mzoi4LiB4Lil4Li44LmI4Lih4LiH4Liy4LiZ4Lia4Lij4Li04Lir4Liy4Lij4Lii4Li44LiX4LiY4Lio4Liy4Liq4LiV4Lij4LmM4LiB4Liy4Lij4Lie4Lix4LiS4LiZ4Liy4LiI4Lix4LiH4Lir4Lin4Lix4LiU4LiK4Liy4Lii4LmB4LiU4LiZ4Lig4Liy4LiE4LmD4LiV4LmJIjt9', 1770947215),
+('W7871RjVkHQldBZfIm210dwx9TrnPkgzePFHhjnM', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0', 'YToxMTp7czo2OiJfdG9rZW4iO3M6NDA6IkpVSEQ3ODhINU41eVJQd0JZbjFMWUhXSWYxUnhFbmlLUjdlU0FEWDQiO3M6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjM1OiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvdXNlci9jYWxlbmRhciI7czo1OiJyb3V0ZSI7czoxMzoidXNlcl9jYWxlbmRhciI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6MTQ6InVzZXJfbG9nZ2VkX2luIjtiOjE7czoxMToiZW1wbG95ZWVfaWQiO2k6NDtzOjk6InVzZXJfbmFtZSI7czozMToi4Liu4Liy4LiZ4Lix4LiZIOC4quC4suC5gOC4o+C4sCI7czoxMDoiZmlyc3RfbmFtZSI7czoxNToi4Liu4Liy4LiZ4Lix4LiZIjtzOjk6Imxhc3RfbmFtZSI7czoxNToi4Liq4Liy4LmA4Lij4LiwIjtzOjU6InBob25lIjtzOjk6IjA3MzI3NDExMiI7czoxMzoiZGVwYXJ0bWVudF9pZCI7aToyO3M6MTU6ImRlcGFydG1lbnRfbmFtZSI7czo2Njoi4LiB4Lil4Li44LmI4Lih4LiH4Liy4LiZ4Lia4Lij4Li04Lir4Liy4Lij4LiH4Lia4Lib4Lij4Liw4Lih4Liy4LiTIjt9', 1770957990);
 
 -- --------------------------------------------------------
 
@@ -325,6 +363,7 @@ ALTER TABLE `departments`
 ALTER TABLE `employees`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `employees_card_id_unique` (`card_id`),
+  ADD UNIQUE KEY `employees_username_unique` (`username`),
   ADD UNIQUE KEY `employees_email_unique` (`email`);
 
 --
@@ -394,19 +433,19 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `booking_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -424,13 +463,13 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `room_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `room_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
